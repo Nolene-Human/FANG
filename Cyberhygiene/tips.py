@@ -24,6 +24,9 @@ def tips_lit():
     select = lit.selectbox("Select a topic from the dropdown list?",(" ","Maintain good password hygiene","Update systems and software","Multi Factor Authentication","Keep up-to-date on phishing/security training and awareness","Implement 'Zero Trust'","Anti-Virus", "Virtual Private Network"))
 
     if select == "Maintain good password hygiene":
+
+        lit.markdown("[Check if your password has been compromised](https://haveibeenpwned.com/)")
+
         lit.subheader("Some reason why you should")
         lit.markdown("- Block Web and Email Threats")
         lit.markdown("- Keep Hackers of your PC")

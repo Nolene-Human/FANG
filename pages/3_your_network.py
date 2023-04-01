@@ -4,6 +4,7 @@ from streamlit_extras.switch_page_button import switch_page
 import Scanners.findhostdetails
 
 
+
 import streamlit.components.v1 as components
 
 
@@ -12,6 +13,8 @@ import uuid
 import socket
 
 import os
+
+import passwordvault
 
 lit.set_page_config(page_title="Your Space",page_icon='🚀', layout="wide")
 
@@ -41,17 +44,21 @@ with tab1:
         # -- get the devices mac address and print for user using socket
 
         try:
-                hostname = socket.gethostname()
-                lit.markdown("Your Computer Name is : " + hostname)
+            hostname = socket.gethostname()
+            lit.markdown("Your Computer Name is : " + hostname)
 
         except:
-          lit.write("Unable to get Hostname and IP")
+            lit.write("Unable to get Hostname and IP")
 
 
         lit.write("Your device ip address is : "+ Scanners.findhostdetails.ip_address_lit())
 
 with tab2:   
         lit.write("password management tool")
+
+        generate_password=lit.button("Generate Password")
+        if generate_password:
+                passwordvault.generate_password()
 
 with tab3:   
         lit.write("cybersecurity plan/incident response plan")
