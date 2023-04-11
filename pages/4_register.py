@@ -1,10 +1,14 @@
 import streamlit as lit
+from PIL import Image
 
 
 #authentication
 import pyrebase
 
+lit.set_page_config(page_title="Register to FANG",page_icon='🚀', layout="wide")
 
+logo=Image.open("Art/Pictures/logo.png")
+lit.image(logo,caption="It's all for show productions")
 
 firebaseConfig = {
     'apiKey': "AIzaSyDwdy5R6ovvWadA_tV74J9-eEUN4Ghy3ME",

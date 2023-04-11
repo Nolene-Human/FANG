@@ -14,6 +14,7 @@ def firebase_aut():
     'measurementId': "G-JTL2XV1WG8"
     };
 
-    firebase = pyrebase.initialize_app(firebaseConfig)
+    firebase = pyrebase.initialize_app(firebaseConfig)   
+    return firebase 
     
     

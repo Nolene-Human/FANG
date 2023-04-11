@@ -10,11 +10,10 @@ import streamlit as lit
 
 def attacks_lit():
 
-   count = 0
-   
+
 
    lit.subheader("""
-    Test your vulnerability by checking the boxes that are relevant to you:
+    Identify your risks:
         """)
 
     # -- tick box for users input -- #
@@ -38,51 +37,45 @@ def attacks_lit():
     # -- if a tick box is checked the vulnerability is shown -- #
    if social_Engineering:
       lit.write("**Social Engineering**: this relies on you making a mistake by giving away your information (phishing and email impersonation)")
-      count= count +1
+    
 
    if thirdparty_Exposure:
       lit.write("""**Third-party Exprosure** : You are working outside of a protected network, working from home as an employee or contractors.
                  This is making you a weak link in the newtork for the organisations you are working for""")
-      count= count +1
+    
       
    if configuration:
       lit.write("""**Configuration Mistakes** : Not ensuring all your devices connected to the internet meets the minimum security configuration is a huge risk""")
-      count= count +1
-
+    
    if hygiene:
       lit.write("""**Poor Cyber Hygiene** : Poor password, unprotected home networks makes for an easy target""")
-      count= count +1
+     
 
    if cloud:
       lit.write("""**Cloud Vulnerabilities** : Web Application and Cloud Service breaches are increasing, default security settings were exposed, exposing ways for application and services
          to be hacked, with insufficient access control such as Multifactor Authentication (MFA) and casual trust between environments is making your devices easier to hack""")
-      count= count +1
+      
 
    if mobile:
       lit.write("""**Mobile Device Vulnerabilities** : Malicious mobile application, coming sometimes from the organisations you working with can cause a risk in you network""")
-      count= count +1
+     
 
    if things:
       lit.write("""**Internet of Things** : Malicious mobile application, coming sometimes from the organisations you working with can cause a risk in you network""")
-      count= count +1
-
+      
    if ransomeware:
       lit.write("""**Randsomeware** : Through malicious software sent to you by an attacker data can be held for ransom, blocking you from accessing it until you have paid, or could provide details
       on how they have hacked your system and threat to release this to your clients.""")
-      count= count +1
-
+    
    if data:
       lit.write("""**Poor Data Management** : Your or the companies you work for, data can be exploited for financial gain- this is different than ransomeware as the data is sold to a third party without your
       knowledge.""")
-      count= count +1
+    
 
    if procedures:
       lit.write("""**Inadequate Post-Attack Procedures** : Not having a system or process in place to recover from any of these attacks could close your business or destroy your reputation.""")
-      count= count +1
+      
 
-   with lit.sidebar:
-      lit.write("Calculate your CyberSecurity Score")
-      lit.write("Your attack score = ", count)
 
    lit.markdown("---")
 

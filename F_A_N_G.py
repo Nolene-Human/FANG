@@ -14,9 +14,9 @@ from streamlit_extras.switch_page_button import switch_page
 
 
         # PAGE UI 
-lit.set_page_config(page_title="a Fan of the FAM",page_icon='🚀', layout="wide")
+lit.set_page_config(page_title="F A N G",page_icon='🚀', layout="wide")
 
-logo=Image.open("Art/Pictures/it's all just for show.png")
+logo=Image.open("Art/Pictures/logo.png")
 lit.image(logo,caption="It's all for show productions")
 
 
@@ -32,22 +32,25 @@ with tab1:
 
 with tab2:
         
-        import Cyberhygiene.tips
+        import launch_pages.tips
 
         #Navigation
         lit.markdown("# Good CyberHygiene Tecniques + Tips")
         # -- Call the Lit tips module from Cyberhygiene folder -- # 
-        Cyberhygiene.tips.tips_lit()
+        launch_pages.tips.tips_lit()
 
 with tab3:
-        import Cyberhygiene.learn
+        import launch_pages.learn
 
         lit.markdown("# Why are you under attack, and how FANG can help you secure your network")
-        Cyberhygiene.learn.learn_lit()
+        launch_pages.learn.learn_lit()
 
 with tab4:
-        import Cyberhygiene.attacks
+        import launch_pages.test
 
-        lit.markdown("Ticks the boxes that get used in your house")
+        launch_pages.test.attacks_lit()
 
-        Cyberhygiene.attacks.attacks_lit()
+with tab5:
+        import launch_pages.who
+
+        launch_pages.who.who()

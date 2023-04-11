@@ -4,7 +4,7 @@ import streamlit as lit
 from streamlit_extras.switch_page_button import switch_page
 
 #authentication
-import Authentication.user_registration
+
 import pyrebase
 from pyrebase import initialize_app
 #from Crypto.PublicKey import RSA
@@ -25,6 +25,8 @@ def user_login():
     firebase = pyrebase.initialize_app(firebaseConfig)       
     auth = firebase.auth()
 
+    lit.sidebar.button("Reset Password")
+
     lit.header("Login to your network or Register to get started")
 
     email = lit.text_input("Please enter your username")
@@ -33,10 +35,8 @@ def user_login():
     user=[email,password]
 
     login=  lit.button("login")
-    registration=lit.button("register")
     
     if login:
         lit.write("Welcome"+user[0])
 
-    if registration:
-          switch_page("registration")
+ 
