@@ -14,7 +14,7 @@ def attacks_lit():
    
 
    lit.subheader("""
-    Test your vulnerability by checking the boxes that are relevant to you:
+    Identify your risks:
         """)
 
     # -- tick box for users input -- #
@@ -80,9 +80,9 @@ def attacks_lit():
       lit.write("""**Inadequate Post-Attack Procedures** : Not having a system or process in place to recover from any of these attacks could close your business or destroy your reputation.""")
       count= count +1
 
-   with lit.sidebar:
-      lit.write("Calculate your CyberSecurity Score")
-      lit.write("Your attack score = ", count)
+   #with lit.sidebar:
+      #lit.write("Calculate your CyberSecurity Score")
+      #lit.write("Your attack score = ", count)
 
    lit.markdown("---")
 

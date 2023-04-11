@@ -16,7 +16,7 @@ from streamlit_extras.switch_page_button import switch_page
         # PAGE UI 
 lit.set_page_config(page_title="a Fan of the FAM",page_icon='🚀', layout="wide")
 
-logo=Image.open("Art/Pictures/it's all just for show.png")
+logo=Image.open("Art/Pictures/banner.png")
 lit.image(logo,caption="It's all for show productions")
 
 
@@ -51,3 +51,6 @@ with tab4:
         lit.markdown("Ticks the boxes that get used in your house")
 
         Cyberhygiene.attacks.attacks_lit()
+
+with tab5:
+        lit.header("One Determined Human")

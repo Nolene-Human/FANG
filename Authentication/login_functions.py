@@ -4,9 +4,7 @@ import streamlit as lit
 from streamlit_extras.switch_page_button import switch_page
 
 #authentication
-import Authentication.user_registration
 import pyrebase
-from pyrebase import initialize_app
 #from Crypto.PublicKey import RSA
 
 def user_login():
@@ -27,16 +25,22 @@ def user_login():
 
     lit.header("Login to your network or Register to get started")
 
-    email = lit.text_input("Please enter your username")
-    password = lit.text_input("Please enter your password")
+    lit.sidebar.button("Reset Password")
+    
+    email = lit.text_input("Please enter your email")
+    password = lit.text_input("Please enter your password",type="password")
 
     user=[email,password]
 
     login=  lit.button("login")
     registration=lit.button("register")
     
+    
     if login:
-        lit.write("Welcome"+user[0])
-
+        #switch_page("registration")
+        
+        lit.error(" This looks phishy? Are you attempting a Dictionary Attack? Cause we limit your attempts to three tries, sheer brute force won't work.",icon="🤖")
+        lit.write("But users are human so if you forgot your password press reset to go through the authentication process")
+    
     if registration:
           switch_page("registration")
