@@ -1,3 +1,5 @@
+import json
+from urllib import request
 import nmap
 
 import streamlit as lit
@@ -30,23 +32,25 @@ def ipscanner_py():
 
 def ipscanner_lit():
     
+    import streamlit as lit
+    import nmap
     if "gateway" not in lit.session_state:
         lit.session_state["gateway"]= ""
 
-    gateway = lit.session_state["gateway"]
-
-
-
-    count = 0
-
-
+  
     scanner.scan(hosts="192.168.1.1/24", arguments='-sn')
     hosts_list = [(x, scanner[x]['status']['state']) for x in scanner.all_hosts()]
     for host, status in hosts_list:
         devices=('{0}:{1}'.format(host, status))
         #lit.write('{0}:{1}'.format(host, status))
         lit.write(devices)
-        count += 1
+
+
+        showlist_=request.get(hosts_list+"/json")
+        response=json.load(showlist.text)
+
+        lit.write("Device Mac"+response["mac"])
+        lit.write("Device IP"+response["ip"])
 
 
 
