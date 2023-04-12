@@ -1,0 +1,5 @@
+
+*.pyc
+Authentication/__pycache__/login_functions.cpython-39.pyc
+Authentication/__pycache__/login_functions.cpython-39.pyc
+registered_pages/__pycache__/passwordvault.cpython-39.pyc

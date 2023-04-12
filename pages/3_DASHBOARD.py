@@ -4,7 +4,7 @@ from PIL import Image
 from streamlit_extras.switch_page_button import switch_page
 import registered_pages.findhostdetails
 
-
+from streamlit_extras.mention import mention
 
 import streamlit.components.v1 as components
 
@@ -17,7 +17,10 @@ import os
 
 import registered_pages.passwordvault
 
-lit.set_page_config(page_title="Your Network",page_icon='🚀', layout="wide")
+
+lit.set_page_config(page_title="DASHBOARD",
+        page_icon="🚀",
+        layout="wide")
 
 lit.sidebar.write("Hi User, Welcome to your space")
 
@@ -26,9 +29,8 @@ logo=Image.open("Art/Pictures/logo.png")
 lit.image(logo,caption="It's all for show productions")
 
 lit.header("""\n\n
-        WELCOME TO THE FIRST step in reducing your home network's vulnerabilities against cyber attacks
+        Welcome Nolene 
 \n""".upper())
-lit.markdown("---")
 
 tab1, tab2, tab3, tab4, tab5,= lit.tabs(["|  dashboard ","|  password management tool ","|  cybersecurity plan/incident response plan ","|  devices on network ","|  network segmentation "])
 with tab1:
@@ -60,18 +62,20 @@ with tab1:
 
 with tab2:   
         lit.subheader("Password Management Tool")
-        col1, col2, col3= lit.columns(3)
+        col1, col2, col3 = lit.columns(3,gap="large")
         
         col1.write("Enter New Account")
         account_name=col1.text_input("Enter Account Name: ")
+        account_web=col1.text_input("Enter link to account")
         account_username=col1.text_input("Enter Username: ")
         password_entered = col1.text_input("Password: ",type="password")
         save_password=col1.button("Save Entry")
         
         col2.write("List of Accounts")
         if save_password:
-                col2.write(account_name)
-                col2.write(account_username)
+                col2.write("Account name: "+account_name)
+                col2.write("Username: "+account_username)
+                col2.write("Link: "+account_web)
                 show_pass=col2.button("Show Password")
                 if show_pass:
                         col2.write(password_entered)
@@ -140,7 +144,7 @@ with tab5:
                 lit.dataframe(df, use_container_width=True)
         
         with tab2:
-                with lit.expander("Why you want to keep smart devices on a separate network"):
+                with lit.expander("Best Practice for Smart Devices"):
                         lit.write("More details here")
 
         with tab3:
