@@ -21,7 +21,8 @@ lit.image(logo,caption="It's all for show productions")
 
 register_now=lit.sidebar.button("Register Now")
 if register_now:
-        launch_pages.register.register()
+        pages.register.register()
+       
 
 else:
         # HEADER

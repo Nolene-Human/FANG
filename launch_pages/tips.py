@@ -24,6 +24,7 @@ def tips_lit():
     select = lit.selectbox("Select a topic from the dropdown list?",(" ","Maintain good password hygiene","Update systems and software","Multi Factor Authentication","Keep up-to-date on phishing/security training and awareness","Implement 'Zero Trust'","Anti-Virus", "Virtual Private Network"))
 
     if select == "Maintain good password hygiene":
+        lit.markdown("FANG can help you manage all those password, ensure they are strong and enable features that can protect your account from attackers")
         lit.subheader("Some reason why you should")
         lit.markdown("- Block Web and Email Threats")
         lit.markdown("- Keep Hackers of your PC")
@@ -32,10 +33,10 @@ def tips_lit():
         
         lit.subheader("How to:")
         lit.write("Use Password Management Tools")
-        lit.markdown("Consider Passphrase or Random common words")
+        lit.markdown("Consider Passphrase or Random common words for your password")
         lit.image("Art/Pictures/passphrase.png")
 
-        lit.subheader("FANG can help you manage all those password, ensure they are strong and enable features that can protect your account from attackers")
+        
 
     elif select =="Update systems and software":
         lit.subheader("Some reason why you should")
