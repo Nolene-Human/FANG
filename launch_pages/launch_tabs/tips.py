@@ -21,7 +21,7 @@ def tips_py():
 # -- Streamlit -- #
 def tips_lit():
 
-    select = lit.selectbox("Select a topic from the dropdown list?",(" ","Maintain good password hygiene","Update systems and software","Multi Factor Authentication","Keep up-to-date on phishing/security training and awareness","Implement 'Zero Trust'","Anti-Virus", "Virtual Private Network"))
+    select = lit.selectbox("Select a topic from the dropdown list?",(" ","Maintain good password hygiene","Update systems and software","Multi Factor Authentication","Keep up-to-date on phishing/security training and awareness","Implement 'Zero Trust'","Anti-Virus"))
 
     if select == "Maintain good password hygiene":
         lit.markdown("FANG can help you manage all those password, ensure they are strong and enable features that can protect your account from attackers")
@@ -70,11 +70,6 @@ def tips_lit():
         lit.markdown("[LastPass](https://www.lastpass.com/)")
     
     elif select == "Keep up-to-date on phishing/security training and awareness":
-        lit.subheader("Some reason why you should")
-        lit.subheader("What it Does")
-        lit.subheader("Link's to some of the top Anti-Virus Software")
-
-    elif select == "Implement 'Zero Trust'":
         lit.subheader("Some reason why you should")
         lit.subheader("What it Does")
         lit.subheader("Link's to some of the top Anti-Virus Software")

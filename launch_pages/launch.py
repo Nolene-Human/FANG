@@ -11,7 +11,7 @@ import launch_pages.launch_tabs.who
 
 def launch():
     lit.write('--------------------')
-    tab1, tab2, tab3, tab4, tab5 = lit.tabs(["What is FANG","|  CyberSecurity Tips","|  Learn More about Home Network Cybersecurity ","|  See How they can attack your network", "|  Who are we"])
+    tab1, tab2, tab3, tab4, tab5, tab6 = lit.tabs(["What is FANG","|  CyberSecurity Tips","|  Learn More about Home Network Cybersecurity ","|  See How they can attack your network", "|  Who are we", "| testing some code"])
 
     with tab1:
 
@@ -32,3 +32,13 @@ def launch():
 
     with tab5:
             launch_pages.launch_tabs.who.who()
+
+    with tab6:
+                placeholder = lit.empty()
+
+                input = placeholder.text_input('text', key=1)
+                click_clear = lit.button('clear text input', key=3)
+                if click_clear:
+                        input = placeholder.text_input('text', value='', key=2)
+
+                lit.write(input)

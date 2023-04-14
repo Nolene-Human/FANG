@@ -1,13 +1,9 @@
 import streamlit as lit
 from PIL import Image
 # more streamlit imports
-from streamlit_extras.switch_page_button import switch_page
+
 import registered_pages.findhostdetails
-
-from streamlit_extras.mention import mention
-
-import streamlit.components.v1 as components
-
+import Authentication.login_functions
 
 # importing scanning function
 import uuid
@@ -18,13 +14,19 @@ import os
 import registered_pages.passwordvault
 
 
-def test():
-    lit.header("""\n\n
-        Welcome Nolene 
-\n""".upper())
+def dashboard():
 
-    tab1, tab2, tab3, tab4, tab5,= lit.tabs(["|  dashboard ","|  password management tool ","|  cybersecurity plan/incident response plan ","|  devices on network ","|  network segmentation "])
-    with tab1:
+       
+        lit.header("""\n\n
+        Welcome Nolene 
+        \n""".upper())
+
+        #lit.write(Authentication.login_functions.user_login())        
+        lit.sidebar.button("logout")
+
+        tab1, tab2, tab3, tab4, tab5, tab6 = lit.tabs(["|  dashboard ","|  password management tool ","|  cybersecurity plan/incident response plan ","|  devices on network ","|  network segmentation ", "|   PLAYGROUND" ])
+        
+        with tab1:
             col1, col2, col3 = lit.columns(3) 
             
             col1.subheader("Machine details")        
@@ -51,7 +53,7 @@ def test():
             col3.write("Here is all the activities on your network in the last 24hours")
             
 
-    with tab2:   
+        with tab2:   
             lit.subheader("Password Management Tool")
             col1, col2, col3 = lit.columns(3,gap="large")
             
@@ -71,11 +73,11 @@ def test():
                     if show_pass:
                             col2.write(password_entered)
 
-            password=col3.button("Generate a strong password")
-            if password:
-                    registered_pages.passwordvault.generate_password()
+            #password=col3.button("Generate a strong password")
+            #if password:
+                    #registered_pages.passwordvault.generate_password()
 
-    with tab3:   
+        with tab3:   
             lit.write("cybersecurity plan/incident response plan")
             
             #Cyberhygiene.attacks.attacks_lit()
@@ -92,7 +94,7 @@ def test():
             5. Communicating the incident. """)
             lit.button("Export to PDF")
 
-    with tab4:
+        with tab4:
         #https://blog.streamlit.io/editable-dataframes-are-here/
             #https://medium.com/codefile/customizing-streamlit-columns-4bfd58fcb7c9
             import nmap   
@@ -116,7 +118,7 @@ def test():
 
                     devices=lit.button("Save Changes")
 
-    with tab5:
+        with tab5:
             import pandas as pd
             tab1, tab2, tab3, tab4  = lit.tabs(["SEGMENT YOUR NETWORK","LIST OF SMART DEVICES","LIST OF PERSONAL DEVICES","LIST OF WORK DEVICES"]) 
             
@@ -145,3 +147,6 @@ def test():
             with tab4:
                     with lit.expander("Best Practice for Work devices in a Home Network"):
                             lit.write("More details here")
+
+        
+            
