@@ -4,6 +4,7 @@ from PIL import Image
 
 import registered_pages.findhostdetails
 import Authentication.login_functions
+import registered_pages.Dashboard.scannetworkdevices
 
 # importing scanning function
 import uuid
@@ -11,7 +12,7 @@ import socket
 
 import os
 
-import registered_pages.passwordvault
+import registered_pages.Dashboard.passwordvault
 
 
 def dashboard():
@@ -24,8 +25,12 @@ def dashboard():
         #lit.write(Authentication.login_functions.user_login())        
         lit.sidebar.button("logout")
 
-        tab1, tab2, tab3, tab4, tab5, tab6 = lit.tabs(["|  dashboard ","|  password management tool ","|  cybersecurity plan/incident response plan ","|  devices on network ","|  network segmentation ", "|   PLAYGROUND" ])
+        ## --------------------------- Initiate TABS accross Page ----------------------------------------------------- ##
+
+        tab1, tab2, tab3, tab4, tab5 = lit.tabs(["|  dashboard ","|  password management tool ","|  cybersecurity plan/incident response plan ","|  devices on network ","|  network segmentation "])
         
+        ## --------------------------------------------------------------------------------------------------------------#
+
         with tab1:
             col1, col2, col3 = lit.columns(3) 
             
@@ -54,28 +59,10 @@ def dashboard():
             
 
         with tab2:   
-            lit.subheader("Password Management Tool")
-            col1, col2, col3 = lit.columns(3,gap="large")
-            
-            col1.write("Enter New Account")
-            account_name=col1.text_input("Enter Account Name: ")
-            account_web=col1.text_input("Enter link to account")
-            account_username=col1.text_input("Enter Username: ")
-            password_entered = col1.text_input("Password: ",type="password")
-            save_password=col1.button("Save Entry")
-            
-            col2.write("List of Accounts")
-            if save_password:
-                    col2.write("Account name: "+account_name)
-                    col2.write("Username: "+account_username)
-                    col2.write("Link: "+account_web)
-                    show_pass=col2.button("Show Password")
-                    if show_pass:
-                            col2.write(password_entered)
+                registered_pages.Dashboard.passwordvault.add_password()
 
-            #password=col3.button("Generate a strong password")
-            #if password:
-                    #registered_pages.passwordvault.generate_password()
+
+        # --------------------------------------------------------------------------------------#
 
         with tab3:   
             lit.write("cybersecurity plan/incident response plan")
@@ -92,32 +79,16 @@ def dashboard():
             3. Security policies.\n
             4. A breach response plan.\n
             5. Communicating the incident. """)
+            
+            # should be a download button https://docs.streamlit.io/library/api-reference/widgets/st.download_button
             lit.button("Export to PDF")
 
+        # ---------------------------------------------------------------------------------------# 
+
         with tab4:
-        #https://blog.streamlit.io/editable-dataframes-are-here/
-            #https://medium.com/codefile/customizing-streamlit-columns-4bfd58fcb7c9
-            import nmap   
-
-            with lit.expander("Block Device"):
-                    lit.write("How to remove a device from your network")
-            scan = lit.button("Scan for list of devices conntect to the Newtork")
-            nm = nmap.PortScanner()
-            if scan:
-                    lit.write("List of Devices on your network")
-                    nm.scan(hosts='192.168.1.0/24', arguments='-sn')
-                    
-                    for host in nm.all_hosts():
-                            if 'mac' in nm[host]['addresses']:
-                                    mac_address = nm[host]["addresses"]["mac"]
-                                    manufacturer = nm[host]["vendor"].get(mac_address, "Unknown")
-                                    lit.write("IP Address: {}, MAC Address: {}, Manufacturer: {}".format(host, mac_address, manufacturer))
-                                    
-
-
-
-                    devices=lit.button("Save Changes")
-
+                registered_pages.Dashboard.scannetworkdevices.scan_network_devices()
+        
+        # ---------------------------------------------------------------------------------------#
         with tab5:
             import pandas as pd
             tab1, tab2, tab3, tab4  = lit.tabs(["SEGMENT YOUR NETWORK","LIST OF SMART DEVICES","LIST OF PERSONAL DEVICES","LIST OF WORK DEVICES"]) 
