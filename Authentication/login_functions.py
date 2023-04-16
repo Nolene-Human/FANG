@@ -1,46 +1,31 @@
 
-
 import streamlit as lit
-from streamlit_extras.switch_page_button import switch_page
+import launch_pages
 
-#authentication
-import pyrebase
-#from Crypto.PublicKey import RSA
+import Firebase.firebaseconfig
 
 def user_login():
-    
-    firebaseConfig = {
-        'apiKey': "AIzaSyDwdy5R6ovvWadA_tV74J9-eEUN4Ghy3ME",
-        'authDomain': "family-area-network.firebaseapp.com",
-        'databaseURL': "https://family-area-network-default-rtdb.asia-southeast1.firebasedatabase.app",
-        'projectId': "family-area-network",
-        'storageBucket': "family-area-network.appspot.com",
-        'messagingSenderId': "601603660956",
-        'appId': "1:601603660956:web:844e256757af50cc2be159",
-        'measurementId': "G-JTL2XV1WG8"
-    }
-       
-    firebase = pyrebase.initialize_app(firebaseConfig)       
-    auth = firebase.auth()
 
-    lit.header("Login to your network or Register to get started")
+        auth= Firebase.firebaseconfig.firebase_auth()
+        email = lit.sidebar.text_input("Please enter your registered email")
+        password = lit.sidebar.text_input("Please enter your password",type='password')
 
-    lit.sidebar.button("Reset Password")
-    
-    email = lit.text_input("Please enter your email")
-    password = lit.text_input("Please enter your password",type="password")
+        login=lit.sidebar.checkbox("Submit")
+                         
+        if login:
+            database=Firebase.firebaseconfig.firebase_database()
 
-    user=[email,password]
-
-    login=  lit.button("login")
-    registration=lit.button("register")
-    
-    
-    if login:
-        #switch_page("registration")
+            user=auth.sign_in_with_email_and_password(email,password)
+            registered_pages.dashboard.dashboard()
+            name=database.child(user['localId']).child('AccountName').get().val()
+            lit.sidebar.markdown("---------------------------")
+            lit.sidebar.subheader("Hi " + name)
+            lit.sidebar.markdown("---------------------------")
+            
         
-        lit.error(" This looks phishy? Are you attempting a Dictionary Attack? Cause we limit your attempts to three tries, sheer brute force won't work.",icon="🤖")
-        lit.write("But users are human so if you forgot your password press reset to go through the authentication process")
-    
-    if registration:
-          switch_page("registration")
+        else:
+            launch_pages.launch.launch()
+
+
+#       lit.error(" This looks phishy? Are you attempting a Dictionary Attack? Cause we limit your attempts to three tries, sheer brute force won't work.",icon="🤖")
+#       lit.write("But users are human so if you forgot your password press reset to go through the authentication process")
