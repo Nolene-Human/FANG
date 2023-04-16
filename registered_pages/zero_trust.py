@@ -49,7 +49,7 @@ def dashboard():
             
 
         with tab2:   
-                registered_pages.Dashboard.passwordvault.add_password()
+                registered_pages.ZeroTrustFunctions.passwordvault.add_password()
 
 
         # --------------------------------------------------------------------------------------#
@@ -76,7 +76,7 @@ def dashboard():
         # ---------------------------------------------------------------------------------------# 
 
         with tab4:
-                registered_pages.Dashboard.scannetworkdevices.scan_network_devices()
+                registered_pages.ZeroTrustFunctions.scannetworkdevices.scan_network_devices()
         
         # ---------------------------------------------------------------------------------------#
         with tab5:
