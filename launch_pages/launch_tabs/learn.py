@@ -1,16 +1,16 @@
+   ## ----------------------------------------THIS IS 'LEARN TAB ------------------------------------------------------##
+ ## -------------------------- Called from Launch.py when user select the Learn tab ------------------------------------##
+ 
+# - NO FUTURE DEVELOPMENT PLANNED - #
 
-# -- SIMPLE INFORMATION PAGE FOR USER THAT LINKS TO ATTACKS PAGE -- #
-# -- FUTURE DEVELOPEMENT -- #
-# -- no future development planned -- #
-
-
-
+## ______________________________________________________________________________________________________________________##
 
 import streamlit as lit
 from streamlit_extras.mention import mention        
 
 def learn_lit():
-
+    
+    lit.markdown("# Why are you under attack, and how FANG can help you secure your network")
 
 # ---------- Key Terminology ---------------#
     

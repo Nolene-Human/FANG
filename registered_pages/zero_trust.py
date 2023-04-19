@@ -6,20 +6,27 @@ import registered_pages.findhostdetails
 import registered_pages.ZeroTrustFunctions.scannetworkdevices
 import registered_pages.ZeroTrustFunctions.passwordvault
 
+import Firebase.firebaseconfig
+
 # importing scanning function
 import uuid
 import socket
 
 
+## ______________________________________________________________________________________________________________________##
+
 def dashboard():
   
-        lit.sidebar.button("logout")
+        #logout=lit.sidebar.button("logout")
+        
+        
 
-        ## --------------------------- Initiate TABS accross Page ----------------------------------------------------- ##
-
+## ______________________________________________________________________________________________________________________##
+        
+        # Initiate TABS accross Page 
         tab1, tab2, tab3, tab4, tab5, tab6 = lit.tabs(["|  dashboard ","|  password management tool ","|  cybersecurity plan/incident response plan ","|  devices on network ","|  network segmentation ","|  My Account "] )
         
-        ## --------------------------------------------------------------------------------------------------------------#
+## ______________________________________________________________________________________________________________________##
 
         with tab1:
             col1, col2, col3 = lit.columns(3) 
@@ -49,6 +56,7 @@ def dashboard():
             
 
         with tab2:   
+                
                 registered_pages.ZeroTrustFunctions.passwordvault.add_password()
 
 

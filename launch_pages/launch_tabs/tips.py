@@ -1,8 +1,20 @@
 
+
+   ## ----------------------------------------THIS IS 'TIPS' TAB ------------------------------------------------------##
+ ## -------------------------- Called from Launch.py when user select the test tab ------------------------------------##
+ 
+# - FUTURE DEVELOPMENT - #
+# - Add questionnaire so user are able to relate better to the treats 
+# - Link each threat to a solution which will either be the TIPS or the SCANNER page 
+
+# ______________________________________________________________________________________________________________________##
+
+# - NO FUTURE DEVELOPEMENT PLANNED - #
+
+
 import streamlit as lit
 
 
-# -- Python ---#
 def tips_py():
 
     
@@ -21,6 +33,7 @@ def tips_py():
 # -- Streamlit -- #
 def tips_lit():
 
+    lit.markdown("# Good CyberHygiene Tecniques + Tips")
     select = lit.selectbox("Select a topic from the dropdown list?",(" ","Maintain good password hygiene","Update systems and software","Multi Factor Authentication","Keep up-to-date on phishing/security training and awareness","Implement 'Zero Trust'","Anti-Virus"))
 
     if select == "Maintain good password hygiene":
