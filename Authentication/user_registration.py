@@ -48,11 +48,11 @@ def register():
     confirmpass=lit.sidebar.text_input("Confirm password",type="password")
     handle=lit.sidebar.text_input("Name : ",key="")
 
-    register =lit.sidebar.checkbox("Register")
+    register_btn =lit.sidebar.checkbox("Register")
     passwordlen = len(password)
  
     # Rules and Checks once user press the 'register' button 
-    if register:
+    if register_btn:
         
         
         try:

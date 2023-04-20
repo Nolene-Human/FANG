@@ -16,9 +16,9 @@ lit.image(logo,caption="It's all for show productions")
 choice=lit.selectbox("Login or Sign up", ["Login","Sign Up"])
 
 if choice=="Login":
-    import Authentication.login
+    import Authentication.user_login
 #lit.sidebar.button("Register")
-    Authentication.login.user_login()
+    Authentication.user_login.user_login()
     lit.sidebar.button("Reset Password")
 
 if choice == "Sign Up":
