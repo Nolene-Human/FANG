@@ -54,7 +54,6 @@ def register():
     # Rules and Checks once user press the 'register' button 
     if register_btn:
         
-        
         try:
             user=auth.create_user_with_email_and_password(email,password) # User is registered and authenticated through firebase.
 
