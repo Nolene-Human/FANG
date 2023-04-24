@@ -1,5 +1,4 @@
-
-   ## ----------------------------------------THIS IS 'LOGIN FUNCTION' ------------------------------------------------------##
+## ----------------------------------------THIS IS 'LOGIN FUNCTION' ------------------------------------------------------##
  ## -------------------------------- Called form fang.py when user select login---------------------------------------------##
 ## -------------------------- Uses Firebase_Config Functions to verify and log in users -----------------------------------##
 
@@ -16,7 +15,7 @@ import json
 
 ## ______________________________________________________________________________________________________________________##
 
-import launch_pages # Import applications Launch page function
+#import launch_pages # Import applications Launch page function
 import registered_pages.ZeroTrustFunctions
 
 ## ______________________________________________________________________________________________________________________##
@@ -93,8 +92,10 @@ def login():
          ## |______________________________________________________________________________________________________________________|##       
           with vault:
                lit.subheader("Password Management Tool")
-               tab1, tab2 = lit.tabs(["|  Vault Entry ","|  Your Vault "])
-                         
+               tab1, tab2, expr_panda = lit.tabs(["|  Vault Entry ","|  Your Vault ", "Panda"])
+          ## |______________________________________________________________________________________________________________________|##  
+          
+          # A FORM to add a account to password vault       
                with tab1:
                                              
                     with lit.form("Enter Account Details",clear_on_submit=True):
@@ -125,17 +126,59 @@ def login():
                     
 
                     
+               ## |______________________________________________________________________________________________________________________|##
 
+               # Display Data with the option to update and delete entry
                with tab2:
                     import pandas as pd
                     
                     vault_acc=database.child(user['localId']).child('vault').get()
+
+
                     for vault_item in vault_acc.each():
                          column_vault=(vault_item.val())
-                         #lit.write(pd.json_normalize(column_vault))
-                         update_vault=lit.experimental_data_editor(column_vault)
-                         if update_vault:
-                               database.child(user['localId']).child("vault").update(update_vault)
+                         #column_vault=pd.DataFrame(column_vault)
+                         
+                         writevault,changevault=lit.columns([3,6])
+                         
+                         with changevault:
+                              #drop_vault=(vault_item.key(),'1')
+                              edit,delete = lit.tabs(["Edit","Delete"])
+                              with edit:
+                                   vault_to_edit, confirm_vault_edit = lit.columns(2)
+                                   with vault_to_edit:
+                                        save_vault=(vault_item.key(),'2')
+                                        #vault_panda=pd.DataFrame(vault_item)
+                                        #lit.write(vault_panda)
+                                        save_edit_vault_data=lit.experimental_data_editor(vault_item.val())
+                                   with confirm_vault_edit:
+                                        save_vault_edit=lit.button("Save Changes",key=save_vault)
+                                        if save_vault_edit:                                         
+                                             database.child(user['localId']).child('vault').child(vault_item.key()).update(save_edit_vault_data)
+                            
+                              with delete:
+                                  
+                                   delete_vault=(vault_item.key(),'3')
+                                   lit.error("🚨 Sure you want to delete this account")
+                                   vault_delete_option=lit.radio("  ",("No","Yes"),key=delete_vault)
+                                   if vault_delete_option == 'Yes':
+                                        database.child(user['localId']).child('vault').child(vault_item.key()).remove()
+                                        lit.write("Account was deleted, it will refresh shortly")
+                                   if vault_delete_option =="No":
+                                        lit.success("Account not yet deleted, please confirm by selecting yes")
+                                                 
+                         with writevault:
+                             lit.write(vault_item.val())        
+
+
+               with expr_panda:
+
+                    vault_acc=database.child(user['localId']).child('vault').get()
+                    column_vault=(vault_item.val())
+                    
+                    vault_panda=pd.DataFrame(vault_acc.val())
+                    lit.write(vault_panda)
+                     
                
           ## |______________________________________________________________________________________________________________________|##  
           with plan:
@@ -216,14 +259,9 @@ def login():
                lit.write("My Account")
 
           
-                    
-     else:
-          launch_pages.launch.launch()
+
   
         
 
 #       lit.error(" This looks phishy? Are you attempting a Dictionary Attack? Cause we limit your attempts to three tries, sheer brute force won't work.",icon="🤖")
 #       lit.write("But users are human so if you forgot your password press reset to go through the authentication process")
-        
-
-          
