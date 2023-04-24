@@ -16,7 +16,7 @@ import json
 ## ______________________________________________________________________________________________________________________##
 
 #import launch_pages # Import applications Launch page function
-import registered_pages.ZeroTrustFunctions
+import registered_pages.ZeroTrustFunctions.passwordvault
 
 ## ______________________________________________________________________________________________________________________##
 
@@ -91,7 +91,18 @@ def login():
                 
          ## |______________________________________________________________________________________________________________________|##       
           with vault:
+               import random
+
                lit.subheader("Password Management Tool")
+               button_generatePassword,password_generatePassword,use_generatepassword = lit.columns(3)
+               with button_generatePassword:
+                     generate_password=lit.checkbox("Give me a Strong Password")
+               with password_generatePassword:
+                     if generate_password:
+                           a_strong_password=lit.write(registered_pages.ZeroTrustFunctions.passwordvault.generate_password())
+               #with use_generatepassword:
+                     #save_generatedpassword=lit.checkbox("Use this password on form")
+
                tab1, tab2, expr_panda = lit.tabs(["|  Vault Entry ","|  Your Vault ", "Panda"])
           ## |______________________________________________________________________________________________________________________|##  
           
@@ -104,6 +115,8 @@ def login():
                          account_web=lit.text_input("Enter link to account")
                          account_username=lit.text_input("Enter Username: ")
                          password_entered = lit.text_input("Enter Password: ")
+                         #if save_generatedpassword:
+                               #lit.write("Password",a_strong_password)
 
                          save_to_vault=lit.form_submit_button("Save Entry")
 
@@ -178,6 +191,9 @@ def login():
                     
                     vault_panda=pd.DataFrame(vault_acc.val())
                     lit.write(vault_panda)
+                    #title_column={"Account" : vault_panda}
+                    #lit.write (title_column)
+                    lit.write("https://www.youtube.com/watch?v=zN2Hua6oII0")
                      
                
           ## |______________________________________________________________________________________________________________________|##  
