@@ -16,6 +16,7 @@ import json
 ## ______________________________________________________________________________________________________________________##
 
 #import launch_pages # Import applications Launch page function
+import launch_pages.launch
 import registered_pages.ZeroTrustFunctions.passwordvault
 
 ## ______________________________________________________________________________________________________________________##
@@ -29,12 +30,14 @@ def login():
 
      # Calling Firbase Config Authentication Function
      auth= Firebase.firebaseconfig.firebase_auth()
-
+     
+     
      
      email = lit.sidebar.text_input("Please enter your registered email")
      password = lit.sidebar.text_input("Please enter your password",type='password')
-
+     
      login_btn=lit.sidebar.checkbox("Login")
+     lit.sidebar.button("Reset Password")
           
           # Rules and Checks once user press the 'login' button              
      if login_btn:
@@ -50,6 +53,8 @@ def login():
           lit.sidebar.subheader("Hi " + name)
           lit.sidebar.markdown("---------------------------")
           database = Firebase.firebaseconfig.firebase_database()
+
+       
     
     ## ||________________________________________________End of Login______________________________________________________________________||##
 
@@ -57,7 +62,7 @@ def login():
     
           # Initiate TABS accross Page 
           dashboard, vault, plan, devices, network, account = lit.tabs(["|  dashboard ","|  password vault ","|  cybersecurity plan/incident response plan ","|  devices on network ","|  network segmentation ","|  My Account "] )
-                
+          lit.sidebar.button("Logout")
      ## ______________________________________________________________________________________________________________________##
           with dashboard:
                import uuid
@@ -91,7 +96,6 @@ def login():
                 
          ## |______________________________________________________________________________________________________________________|##       
           with vault:
-               import random
 
                lit.subheader("Password Management Tool")
                button_generatePassword,password_generatePassword,use_generatepassword = lit.columns(3)
@@ -120,22 +124,13 @@ def login():
 
                          save_to_vault=lit.form_submit_button("Save Entry")
 
-                    if account_web == None or account_username == None or account_name == None:
-                         lit.sidebar.warning("This form needs all the data")
-
+                         #if account_web == None or account_username == None or account_name == None:
+                              #lit.sidebar.warning("This form needs all the data")
                          if save_to_vault:
-                             #if  :
-                                   #lit.warning("mmm, looks like we are missing some info here, please enter all data")
-                                   
-                                   # or password_entered == None:
-                                   #      lit.sidebar.warning("mmm, looks like we are missing some info here, please enter all data")
-                                   # elif account_web == None or account_username == None :
-                                   #      lit.sidebar.warning("mmm, looks like we are missing some info here, please enter all data")
-                                   
-                                   #                               try:
                               data={"vault_account" : account_name,"vault_web":account_web,"vault_username" :account_name,"Account username":account_username,"vault_password":password_entered}
                               database.child(user['localId']).child("vault").push(data)
                               lit.success("Data saved to your vault")
+                              
                     
 
                     
@@ -275,7 +270,8 @@ def login():
                lit.write("My Account")
 
           
-
+     else:
+          launch_pages.launch.launch() 
   
         
 
