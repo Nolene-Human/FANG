@@ -11,6 +11,8 @@
 # Streamlit
 import streamlit as lit
 
+
+
 import json
 
 ## ______________________________________________________________________________________________________________________##
@@ -31,13 +33,12 @@ def login():
      # Calling Firbase Config Authentication Function
      auth= Firebase.firebaseconfig.firebase_auth()
      
-     
-     
      email = lit.sidebar.text_input("Please enter your registered email")
      password = lit.sidebar.text_input("Please enter your password",type='password')
      
      login_btn=lit.sidebar.checkbox("Login")
      lit.sidebar.button("Reset Password")
+     
           
           # Rules and Checks once user press the 'login' button              
      if login_btn:
@@ -52,7 +53,9 @@ def login():
           lit.sidebar.markdown("---------------------------")
           lit.sidebar.subheader("Hi " + name)
           lit.sidebar.markdown("---------------------------")
-          database = Firebase.firebaseconfig.firebase_database()
+          lit.session_state=()
+          logout_user=lit.sidebar.button("Logout")
+
 
        
     
@@ -62,7 +65,8 @@ def login():
     
           # Initiate TABS accross Page 
           dashboard, vault, plan, devices, network, account = lit.tabs(["|  dashboard ","|  password vault ","|  cybersecurity plan/incident response plan ","|  devices on network ","|  network segmentation ","|  My Account "] )
-          lit.sidebar.button("Logout")
+          
+
      ## ______________________________________________________________________________________________________________________##
           with dashboard:
                import uuid
@@ -96,47 +100,60 @@ def login():
                 
          ## |______________________________________________________________________________________________________________________|##       
           with vault:
+          
+          # Password Generator
 
                lit.subheader("Password Management Tool")
-               button_generatePassword,password_generatePassword,use_generatepassword = lit.columns(3)
+               button_generatePassword,password_generatePassword = lit.columns(2)
                with button_generatePassword:
                      generate_password=lit.checkbox("Give me a Strong Password")
                with password_generatePassword:
                      if generate_password:
-                           a_strong_password=lit.write(registered_pages.ZeroTrustFunctions.passwordvault.generate_password())
-               #with use_generatepassword:
-                     #save_generatedpassword=lit.checkbox("Use this password on form")
+                         lit.write(registered_pages.ZeroTrustFunctions.passwordvault.generate_password())
+               
 
                tab1, tab2, expr_panda = lit.tabs(["|  Vault Entry ","|  Your Vault ", "Panda"])
           ## |______________________________________________________________________________________________________________________|##  
           
-          # A FORM to add a account to password vault       
+          # A FORM CREATE data to the password vault       
                with tab1:
                                              
-                    with lit.form("Enter Account Details",clear_on_submit=True):
+                    with lit.form("Enter Account Details into Vault",clear_on_submit=True):
                               
                          account_name=lit.text_input("Enter Account Name: ")
                          account_web=lit.text_input("Enter link to account")
                          account_username=lit.text_input("Enter Username: ")
                          password_entered = lit.text_input("Enter Password: ")
-                         #if save_generatedpassword:
-                               #lit.write("Password",a_strong_password)
 
-                         save_to_vault=lit.form_submit_button("Save Entry")
+                         save_to_vault=lit.form_submit_button("Save to Vault")
 
-                         #if account_web == None or account_username == None or account_name == None:
-                              #lit.sidebar.warning("This form needs all the data")
-                         if save_to_vault:
-                              data={"vault_account" : account_name,"vault_web":account_web,"vault_username" :account_name,"Account username":account_username,"vault_password":password_entered}
-                              database.child(user['localId']).child("vault").push(data)
-                              lit.success("Data saved to your vault")
-                              
-                    
+                         
 
+          # Conditions when button is pressed 
+                    if save_to_vault:  
+                         
+                         vault_acc_check=database.child(user['localId']).child('vault').get("vault_web")
+                         data={"vault_account" : account_name,"vault_web":account_web,"account username":account_username,"vault_password":password_entered}
+                         
+                                                  
+                         if account_web == "" and account_username=="" and account_name=="" and password_entered=="":
+                              lit.error("This form needs all the data")
+
+#### LEFT OFF HERE ################
+                         for vault_check in vault_acc_check.each():
+                               duplicate=vault_check.val()['vault_web']
+                               if duplicate == account_web:
+                                     lit.error("This web account link has already been entered")
+                         
+          # Write data to database
+                         else:
+                                   database.child(user['localId']).child("vault").push(data)
+                                   lit.success("Data saved to your vault")
                     
                ## |______________________________________________________________________________________________________________________|##
 
-               # Display Data with the option to update and delete entry
+          # READ / UPDATE / DELETE password vault data
+               
                with tab2:
                     import pandas as pd
                     
@@ -144,13 +161,12 @@ def login():
 
 
                     for vault_item in vault_acc.each():
-                         column_vault=(vault_item.val())
-                         #column_vault=pd.DataFrame(column_vault)
                          
                          writevault,changevault=lit.columns([3,6])
-                         
+
+               #UPDATE          
                          with changevault:
-                              #drop_vault=(vault_item.key(),'1')
+                              drop_vault=(vault_item.key(),'1')
                               edit,delete = lit.tabs(["Edit","Delete"])
                               with edit:
                                    vault_to_edit, confirm_vault_edit = lit.columns(2)
@@ -158,12 +174,12 @@ def login():
                                         save_vault=(vault_item.key(),'2')
                                         #vault_panda=pd.DataFrame(vault_item)
                                         #lit.write(vault_panda)
-                                        save_edit_vault_data=lit.experimental_data_editor(vault_item.val())
+                                        save_edit_vault_data=lit.experimental_data_editor(vault_item.val(), key=drop_vault)
                                    with confirm_vault_edit:
                                         save_vault_edit=lit.button("Save Changes",key=save_vault)
                                         if save_vault_edit:                                         
                                              database.child(user['localId']).child('vault').child(vault_item.key()).update(save_edit_vault_data)
-                            
+               #DELETE            
                               with delete:
                                   
                                    delete_vault=(vault_item.key(),'3')
@@ -174,20 +190,23 @@ def login():
                                         lit.write("Account was deleted, it will refresh shortly")
                                    if vault_delete_option =="No":
                                         lit.success("Account not yet deleted, please confirm by selecting yes")
-                                                 
+                    
+                    # READ vault data on screen for the user                         
                          with writevault:
                              lit.write(vault_item.val())        
 
+          # Test Code for better tables
 
                with expr_panda:
+                    lit.write ("see code")
 
                     vault_acc=database.child(user['localId']).child('vault').get()
                     column_vault=(vault_item.val())
                     
                     vault_panda=pd.DataFrame(vault_acc.val())
                     lit.write(vault_panda)
-                    #title_column={"Account" : vault_panda}
-                    #lit.write (title_column)
+                    title_column={"Account" : vault_panda}
+                    lit.write (title_column)
                     lit.write("https://www.youtube.com/watch?v=zN2Hua6oII0")
                      
                
