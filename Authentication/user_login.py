@@ -56,6 +56,9 @@ def login():
           lit.session_state=()
           logout_user=lit.sidebar.button("Logout")
 
+          if logout_user:
+                auth.revoke_refresh_tokens(user)
+
 
        
     
@@ -234,26 +237,35 @@ def login():
           ## |______________________________________________________________________________________________________________________|##  
 
           with devices:
-               import nmap
-                   #https://blog.streamlit.io/editable-dataframes-are-here/
-            #https://medium.com/codefile/customizing-streamlit-columns-4bfd58fcb7c9
-       
-               with lit.expander("Block Device"):
-                    lit.write("How to remove a device from your network")
+               import scapy.all as s
                
-               scan = lit.checkbox("Scan for the list of devices conntect to the Newtork")
-        
-               nm = nmap.PortScanner()
-               if scan:
-                    lit.write("List of Devices on your network")
-                    nm.scan(hosts='192.168.1.0/24', arguments='-sn')
-                    
-                    for host in nm.all_hosts():
-                         if 'mac' in nm[host]['addresses']:
-                              mac_address = nm[host]["addresses"]["mac"]
-                              manufacturer = nm[host]["vendor"].get(mac_address, "Unknown")
-                              lit.write("IP Address: {}, MAC Address: {}, Manufacturer: {}".format(host, mac_address, manufacturer))
+               run=lit.checkbox("run")
+               #list_devices=[]
+               # create a dictionary to store the result
+               list_devices = {}
+               list_devices['Devices'] = []
+              
+               if run:
+                    answered_list=s.arping("192.168.1.0/24")
+              
+               # iterate through the result and add each host to the dictionary
+                    for sent, received in answered_list[0].res:
+                         list_devices['Devices'].append({
+                              'ip': received.psrc,
+                              'mac': received.hwsrc,
+                              'vendor': received.hwtype
+                    })
 
+               # print the result in JSON format
+               lit.json(list_devices)
+               
+
+
+
+               
+
+
+               
 
           with network:
                import pandas as pd
