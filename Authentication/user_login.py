@@ -159,7 +159,8 @@ def login():
                
                with tab2:
                     import pandas as pd
-                    
+
+               # READ     
                     vault_acc=database.child(user['localId']).child('vault').get()
 
 
@@ -238,34 +239,59 @@ def login():
 
           with devices:
                import scapy.all as s
-               
-               run=lit.checkbox("run")
-               #list_devices=[]
-               # create a dictionary to store the result
+           
+               #Run the scan of the network
+               run=lit.checkbox("Run a scan")
                list_devices = {}
                list_devices['Devices'] = []
-              
+               
                if run:
-                    answered_list=s.arping("192.168.1.0/24")
-              
-               # iterate through the result and add each host to the dictionary
-                    for sent, received in answered_list[0].res:
-                         list_devices['Devices'].append({
-                              'ip': received.psrc,
-                              'mac': received.hwsrc,
-                              'vendor': received.hwtype
-                    })
+                         answered_list=s.arping("192.168.1.0/24")
+               
+                    # iterate through the result and add each host to the dictionary
+                         for sent, received in answered_list[0].res:
+                              list_devices['Devices'].append({
+                                   'ip': received.psrc,
+                                   'mac': received.hwsrc,
+                                   'name': ""
+                                   #'vendor': received.hwtype
+                         })
+               
+               #lit.json(list_devices)
 
-               # print the result in JSON format
-               lit.json(list_devices)
+               #Compare to database and list new devices
+
+               save_devices=lit.checkbox('Save Entries')
+               # Write to database
+               if save_devices:
+                    ip=received.psrc
+                    mac=received.hwsrc
+                    name=""
+                    your_devices={"ip":ip,"mac":mac,"name":name}
+                    database.child(user['localId']).child('devices').push(your_devices)
+                                
+               
+               # lit.write("Your saved Devices")
+               # get_your_devices=database.child(user['localId']).child('devices').get()
+               # col1,col2,col3=lit.columns([3,3,3])
+                    
+               # for device in get_your_devices.each():
+               #      result=device.val()
+               #      ip_result=result["ip"]
+               #      mac_result=result["mac"]
+               #      name_result=result["name"]
+
+               #      with col1:     
+               #           lit.write(ip_result) 
+               #      with col2:
+               #           lit.write(mac_result)
+
+               #      with col3:
+               #            lit.write(name_result)
+                         
+
                
 
-
-
-               
-
-
-               
 
           with network:
                import pandas as pd
