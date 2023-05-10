@@ -60,7 +60,6 @@ def login():
                 auth.revoke_refresh_tokens(user)
 
 
-       
     
     ## ||________________________________________________End of Login______________________________________________________________________||##
 
@@ -239,40 +238,103 @@ def login():
 
           with devices:
                import scapy.all as s
+
+               scan_devices, your_devices =lit.tabs(["Scan Devices","Your Device Database"])
            
+               cola,colb=lit.columns([3,3])
+               ip_col,mac_col,manuf_col,name_col=lit.columns([3,3,3,3])
+
+               with cola:     
                #Run the scan of the network
-               run=lit.checkbox("Run a scan")
-               list_devices = {}
-               list_devices['Devices'] = []
-               
-               if run:
+                    run=lit.checkbox("Run a scan")
+                    nmap=lit.checkbox("Run nmap code")
+                    list_devices = []
+                    #list_devices['Devices'] = []
+               with colb:
+                    save_devices=lit.checkbox('Save Entries')
+
+                    if run:
                          answered_list=s.arping("192.168.1.0/24")
-               
-                    # iterate through the result and add each host to the dictionary
+                         
+                         # iterate through the result and add each host to the dictionary
                          for sent, received in answered_list[0].res:
-                              list_devices['Devices'].append({
-                                   'ip': received.psrc,
-                                   'mac': received.hwsrc,
-                                   'name': ""
-                                   #'vendor': received.hwtype
-                         })
-               
-               #lit.json(list_devices)
+                              #list_devices.append({
+                                   #'ip': received.psrc,
+                                   #'mac': received.hwsrc,
+                                   #'name': ""
+                              #})
+                              ip=received.psrc
+                              mac=received.hwsrc
+                              device_name="New"
+                              devices={"ip":ip,"mac":mac,"name":device_name}
+                              list_devices.append(devices)
+                              if save_devices:
+                                   database.child(user['localId']).child('Devices').push(devices)
+                              
+                              
+                              with ip_col:
+                                   lit.write(ip)
+                              with mac_col:
+                                   lit.write(mac)
+                              with name_col:
+                                   #change_device_name=lit.experimental_data_editor(device_name)
+                                   lit.write(device_name)
+                         
+                    #lit.json(list_devices)
+                    
+                    if nmap:
+                         with ip_col:
+                               lit.write("IP Address")
+                         with mac_col:
+                               lit.write("MAC Address")
+                         with manuf_col:
+                               lit.write("Manufacturer")
+                         with name_col:
+                               lit.write("Device Name")
+                         import nmap
+                         nm = nmap.PortScanner()   
+                         nm.scan(hosts='192.168.1.0/24', arguments='-sn')
+                         list_devices_nmap=[]
+                         save_devices_nmap=lit.checkbox("Save to database -nmap")
+
+                         for host in nm.all_hosts():
+                              if 'mac' in nm[host]['addresses']:
+                                   mac_address = nm[host]["addresses"]["mac"]
+                                   manufacturer = nm[host]["vendor"].get(mac_address, "Unknown")
+                                   #lit.write("IP Address: {}, MAC Address: {}, Manufacturer: {}".format(host, mac_address, manufacturer))                                                                                                       
+                                   with ip_col:
+                                        lit.write(host)
+                                   with mac_col:
+                                        lit.write(mac_address)
+                                   with manuf_col:
+                                        lit.write(manufacturer)
+                                   with name_col:
+                                         lit.write("New")
+
+                                   devices_nmap={"ip":host,"mac":mac_address,"manufacturer":manufacturer,"name":"New"}
+                                   list_devices_nmap.append(devices_nmap)
+                              if save_devices_nmap:
+                                   database.child(user['localId']).child('Devices').push(devices_nmap)
 
                #Compare to database and list new devices
-
-               save_devices=lit.checkbox('Save Entries')
-               # Write to database
-               if save_devices:
-                    ip=received.psrc
-                    mac=received.hwsrc
-                    name=""
-                    your_devices={"ip":ip,"mac":mac,"name":name}
-                    database.child(user['localId']).child('devices').push(your_devices)
+               
+                    # Write to database
+                    # saved_devices={}
+                    # saved_devices['Devices'] = []
+                    # if save_devices:
+                    #      ip=received.psrc
+                    #      mac=received.hwsrc
+                    #      name=""
+                         
+                    #      for devices in list_devices:                               
+                    #           devices={"ip":ip,"mac":mac,"name":name}
+                    #           saved_devices.append(devices)                
+                         
+                         
                                 
                
-               # lit.write("Your saved Devices")
-               # get_your_devices=database.child(user['localId']).child('devices').get()
+               #lit.write("Your saved Devices")
+               #get_your_devices=database.child(user['localId']).child('devices').get()
                # col1,col2,col3=lit.columns([3,3,3])
                     
                # for device in get_your_devices.each():
@@ -287,7 +349,7 @@ def login():
                #           lit.write(mac_result)
 
                #      with col3:
-               #            lit.write(name_result)
+               #            lit.experimental_data_editor(name_result)
                          
 
                
