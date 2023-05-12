@@ -3,6 +3,9 @@ import streamlit as lit
 from PIL import Image
 
 
+
+
+
 lit.set_page_config(page_title="Register for a FANG Account ",page_icon='🚀', layout="wide")
 
 logo=Image.open("Art/Pictures/banner.png")
