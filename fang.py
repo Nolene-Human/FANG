@@ -1,6 +1,6 @@
-## ----------------------------------------THIS IS 'MAIN' ------------------------------------------------------##
- ## ----------------------------Launced and the only 'page in this application-----------------------------------------##
-## ---------------All other 'pages' are called functions displayed when conditions have been met-------------------------##
+## ----------------------------------------THIS IS 'MAIN' ----------------------------------------------- ##
+## ----------Launced when application start and is the only 'page' in this application------------------##
+## --------All other 'pages' are called functions displayed when conditions have been met-------------##
 
 # - NO FUTURE DEVELOPMENT PLANNED - #
 
@@ -30,12 +30,12 @@ lit.image(logo,caption="It's all for show productions")
 ## ______________________________________________________________________________________________________________________##
 
 ## Side Bar Navigation
-choice=lit.sidebar.selectbox('Login/Register',['Welcome Back','Login','Register'])
+choice=lit.sidebar.selectbox('Login/Register',['Next Step','Login','Register'])
 
 ## ______________________________________________________________________________________________________________________##
 
 ## Side Bar and Navigation
-if choice == 'Welcome Back':
+if choice == 'Next Step':
         launch_pages.launch.launch()
 
 if choice == 'Login':

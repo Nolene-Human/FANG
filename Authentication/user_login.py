@@ -32,13 +32,15 @@ def login():
 
      # Calling Firbase Config Authentication Function
      auth= Firebase.firebaseconfig.firebase_auth()
-     
+     database=Firebase.firebaseconfig.firebase_database()
      email = lit.sidebar.text_input("Please enter your registered email")
      password = lit.sidebar.text_input("Please enter your password",type='password')
      
      login_btn=lit.sidebar.checkbox("Login")
-     lit.sidebar.button("Reset Password")
+     reset_password=lit.sidebar.button("Reset Password")
      
+     #if reset_password:
+           #auth.send_password_reset_email(email)
           
           # Rules and Checks once user press the 'login' button              
      if login_btn:
@@ -46,9 +48,9 @@ def login():
           auth= Firebase.firebaseconfig.firebase_auth()
           user=auth.sign_in_with_email_and_password(email,password) # Authenticates registered users agains password
           # Once Authenticated then the users dashboard with user details are displayed   
-                    
+          database.child(user['localId']).child("vault").push({"vault_name" : "FANG","vault_web":"www.fang.com","account_username":email,"vault_password":password})
           # Database Get function to display Welcome message in Sidebar
-          database=Firebase.firebaseconfig.firebase_database()
+          
           name=database.child(user['localId']).child('AccountName').get().val()
           lit.sidebar.markdown("---------------------------")
           lit.sidebar.subheader("Hi " + name)
@@ -57,8 +59,7 @@ def login():
           logout_user=lit.sidebar.button("Logout")
 
           if logout_user:
-                auth.revoke_refresh_tokens(user)
-
+               auth.delete_user_account(user['idToken'])
 
     
     ## ||________________________________________________End of Login______________________________________________________________________||##
@@ -151,12 +152,11 @@ def login():
                     if save_to_vault:  
                          
                          vault_acc_check=database.child(user['localId']).child('vault').get("vault_web")
-                         data={"vault_account" : account_name,"vault_web":account_web,"account username":account_username,"vault_password":password_entered}
-                         
-                                                  
+                         data={"vault_name" : account_name,"vault_web":account_web,"account_username":account_username,"vault_password":password_entered}
+                                                     
                          if account_web == "" and account_username=="" and account_name=="" and password_entered=="":
                               lit.error("This form needs all the data")
-
+                    
 #### LEFT OFF HERE ################
                          for vault_check in vault_acc_check.each():
                                duplicate=vault_check.val()['vault_web']

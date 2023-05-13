@@ -3,7 +3,7 @@
 ## Family Area Network Gang
 ## by Nolene Human 
 date: 31/01/2023
-This application is built of the back of a Bachelor of Software Engineering Cybersecurity assignment to investigate a solution with recomended improvements.
+This application is built of the back of a Bachelor of Software Engineering Cybersecurity assignment to investigate a solution with recommended improvements.
 
 # IMPORTANT TO READ
 

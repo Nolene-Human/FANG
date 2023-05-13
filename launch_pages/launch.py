@@ -24,7 +24,7 @@ import launch_pages.launch_tabs.who
 ## This is the launch page Layout - each tab calls a different function displaying the various features
 def launch():
     lit.write('--------------------')
-    tab1, tab2, tab3, tab4, tab5, tab6 = lit.tabs(["What is FANG","|  CyberSecurity Tips","|  Learn More about Home Network Cybersecurity ","|  See How they can attack your network", "|  Who are we", "| testing some code"])
+    tab1, tab2, tab3, tab4, tab5, tab6 = lit.tabs(["What is FANG","|  CyberSecurity Tips","|  Learn Home Cybersecurity ","|  Take the Vulnerability Test", "|  Who are we", "| testing some code"])
 
     with tab1: # What is FANG
 
@@ -33,15 +33,15 @@ def launch():
     with tab2: # Displaying tips and tricks on good cyberHygiene
             
             
-            launch_pages.launch_tabs.tips.tips_lit()
+            launch_pages.launch_tabs.tips.tips()
 
     with tab3: # Displaying educational topics for users on networking and cybersecurity           
 
-            launch_pages.launch_tabs.learn.learn_lit()
+            launch_pages.launch_tabs.learn.learn()
 
     with tab4: # Displaying a test for users to show their vulnerabilties
             
-            launch_pages.launch_tabs.test.attacks_lit()
+            launch_pages.launch_tabs.test.test()
 
     with tab5: # Displaying a bit more about the team
             launch_pages.launch_tabs.who.who()

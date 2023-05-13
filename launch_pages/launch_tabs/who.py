@@ -13,6 +13,8 @@
 # - NO FUTURE DEVELOPEMENT PLANNED - #
 
 import streamlit as lit
+from PIL import Image #used to display images on page
 
 def who():
+
     lit.header("One Determined Human")
