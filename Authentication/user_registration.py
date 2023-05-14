@@ -30,8 +30,10 @@ def register():
     
     # cancel print of python call back errors on user screen
     sys.tracebacklimit=0
+    
+    col1,col2=lit.columns(2)
 
-    launch_pages.launch.launch() # keeps user on app launch page if not verified registered user
+    #launch_pages.launch.launch() # keeps user on app launch page if not verified registered user
 
     # Calling all Firebase Database and Authentication functions from Firebase
     firebase = Firebase.firebaseconfig.firebase_config()   
@@ -40,17 +42,7 @@ def register():
 
     ## UI/UX for Registration form on the sidebar
     
-    with lit.sidebar.form("Lets get Registered",clear_on_submit=True):
-        lit.info("""
-        We encourage having a STRONG PASSWORD\n 
-        1. See our Cybersecurity Tips page for ideas  \n
-        2. This password would need :\n
-        a. At least 6 characters\n
-        b. Should contain a $ @ # symbol\n
-        c. At least one uppercase
-        """)
-        lit.error("[See if your account has already been compromised](https://haveibeenpwned.com/)")
-        
+    with col1.form("Lets get Registered"):
    
         email=lit.text_input("Your Email address")
         password=lit.text_input("Enter your password",type="password")
@@ -86,9 +78,18 @@ def register():
                     We have sent you a verification email, please check your junk folder.""")
                 
             except requests.exceptions.HTTPError as error:
-                       lit.sidebar.error("Email incomplete or already registered. Please try again or try logging in")
+                       lit.sidebar.error("There was a problem please check your email entered.")
 
                 
-
+        col2.info("""
+        We encourage having a STRONG PASSWORD\n 
+        1. See our Cybersecurity Tips page for ideas  \n
+        2. This password would need :\n
+        a. At least 6 characters\n
+        b. Should contain a $ @ # symbol\n
+        c. At least one uppercase
+        """)
+        col2.error("[See if your account has already been compromised](https://haveibeenpwned.com/)")
+        
 
 

@@ -16,6 +16,7 @@ from PIL import Image #used to display images on page
 import launch_pages.launch
 import Authentication.user_registration
 import Authentication.user_login
+import Firebase.firebaseconfig
 
 ## ______________________________________________________________________________________________________________________##
 
@@ -29,17 +30,43 @@ lit.image(logo,caption="It's all for show productions")
 
 ## ______________________________________________________________________________________________________________________##
 
+
 ## Side Bar Navigation
-choice=lit.sidebar.selectbox('Login/Register',['Next Step','Login','Register'])
+choice=lit.sidebar.selectbox('Welcome to FANG',['Home','Register','Login',"Reset Password",'Logout'])
 
 ## ______________________________________________________________________________________________________________________##
 
 ## Side Bar and Navigation
-if choice == 'Next Step':
+if choice == 'Home':
         launch_pages.launch.launch()
 
 if choice == 'Login':
-        Authentication.user_login.login()
+     email = lit.sidebar.text_input("Please enter your registered email")
+     password = lit.sidebar.text_input("Please enter your password",type='password')
+     
+     login = lit.sidebar.checkbox("Login")
+          
+     if login:
+        
+       Authentication.user_login.login(email,password)
+       
+if choice=="Reset Password":
+        launch_pages.launch.launch()
+        email=lit.sidebar.text_input("Please enter your email address")
+        reset_pass=lit.sidebar.button("Reset password")
+
+        if reset_pass:
+                reset=Firebase.firebaseconfig.firebase_auth()
+                reset.send_password_reset_email(email)
+                lit.sidebar.write("Reset Password email has been sent")      
 
 if choice == 'Register':
         Authentication.user_registration.register()
+
+if choice == 'Logout':
+
+        lit.sidebar.success("You are logged out")
+        launch_pages.launch.launch()
+        
+
+        
