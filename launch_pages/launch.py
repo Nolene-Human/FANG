@@ -17,41 +17,36 @@ import launch_pages.launch_tabs.test
 import launch_pages.launch_tabs.tips
 import launch_pages.launch_tabs.what
 import launch_pages.launch_tabs.who
+import launch_pages.launch_tabs.testintro
 
 
 ## ______________________________________________________________________________________________________________________##
 
 ## This is the launch page Layout - each tab calls a different function displaying the various features
 def launch():
-    lit.write('--------------------')
-    tab1, tab2, tab3, tab4, tab5, tab6 = lit.tabs(["What is FANG","|  CyberSecurity Tips","|  Learn Home Cybersecurity ","|  Take the Vulnerability Test", "|  Who are we", "| testing some code"])
+        tab1, tab2, tab3, tab4, tab5, tab6 = lit.tabs(["Introduction","|   What is FANG","|  CyberSecurity Tips","|  Learn Home Cybersecurity ","|  Take the Vulnerability Test", "|  Who are we"])
 
-    with tab1: # What is FANG
+        with tab1:
+                launch_pages.launch_tabs.testintro.testing1()
+
+        with tab2: # What is FANG
 
             launch_pages.launch_tabs.what.what()
 
-    with tab2: # Displaying tips and tricks on good cyberHygiene
+        with tab3: # Displaying tips and tricks on good cyberHygiene
             
             
             launch_pages.launch_tabs.tips.tips()
 
-    with tab3: # Displaying educational topics for users on networking and cybersecurity           
+        with tab4: # Displaying educational topics for users on networking and cybersecurity           
 
             launch_pages.launch_tabs.learn.learn()
 
-    with tab4: # Displaying a test for users to show their vulnerabilties
+        with tab5: # Displaying a test for users to show their vulnerabilties
             
             launch_pages.launch_tabs.test.test()
 
-    with tab5: # Displaying a bit more about the team
+        with tab6: # Displaying a bit more about the team
             launch_pages.launch_tabs.who.who()
 
-    with tab6: # This is a holding place to test a few scenarios and will  deleted at the end of development
-                placeholder = lit.empty()
-
-                input = placeholder.text_input('text', key=1)
-                click_clear = lit.button('clear text input', key=3)
-                if click_clear:
-                        input = placeholder.text_input('text', value='', key=2)
-
-                lit.write(input)
+    

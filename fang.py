@@ -22,6 +22,13 @@ import Authentication.mfa
 import Authentication.loginform 
 import requests
 
+#animation
+import json
+from streamlit_lottie import st_lottie
+import Art.Animation.lottie_animations
+
+import unique_streamlit.session_states
+
 auth= Firebase.firebaseconfig.firebase_auth()
 database=Firebase.firebaseconfig.firebase_database()
 
@@ -46,44 +53,45 @@ home=lit.sidebar.radio("""**WELCOME**""",['Home','Register','Login',"Reset Passw
 ## ______________________________________________________________________________________________________________________##
 
 
-if home == 'Login':       
- 
+
+if home == 'Login':  
+
         email = lit.sidebar.text_input("Please enter your registered email")
         password = lit.sidebar.text_input("Please enter your password",type='password')
         
-        lit.sidebar.markdown("---")  
-       
-        login = lit.sidebar.checkbox("Login",)
-        
-        if login:
-
+        lit.sidebar.markdown("---") 
+                
+        if email !="" or password != "":
                 try:
                         user=auth.sign_in_with_email_and_password(email,password)
                         new_OTP=name=database.child(user['localId']).child('Userkey').get().val()
                         generated_OTP=Authentication.mfa.generatepin(new_OTP)
-                        entered_OTP=lit.sidebar.text_input("Enter your one time passcode: ")
+                        entered_OTP=lit.sidebar.text_input("One_Time_Passcode ")
 
-                        verify_OTP=lit.sidebar.checkbox("Verify")
-                        if verify_OTP:
-                                lit.write(generated_OTP)
+                        if lit.sidebar.button("Let's Go :flying_saucer:"):
+
                                 if generated_OTP == entered_OTP:
-                                        lit.header("Welcome to your home page")
-                                        logged_in=lit.sidebar.checkbox("",['Logout'], label_visibility="collapsed")
-                                        if logged_in=="Logout":
-                                                launch_pages.launch.launch()
-                                                lit.sidebar.success("You are logged out")
+                                        lit.header("You are logged in!")
+                                        lit.write("Thank you for testing ")
+                                                   
+                                        wining=Art.Animation.lottie_animations.load_animation("Art/Animation/welldone_alien.json")
+                                        st_lottie(
+                                        wining,
+                                        speed=1,
+                                        loop=True
 
-                                else:
-                                        lit.write("codes did not match")               
+                                                )
+
+                        else:
+                                        lit.sidebar.error("**Code not valid**")               
+                        
                 except requests.exceptions.HTTPError as err:
-                                lit.write(err)
-                                lit.error("There is a problem with the details you entered, please retry.")  
-                                lit.subheader("""Forgot your password?
-                                You can reset your password in the drop down list""")  
-                                
+                                lit.sidebar.markdown("**Please enter valid info**")  
+                
+                lit.sidebar.markdown("______")                       
 
-                       
-elif home=="Reset Password":
+
+elif home == "Reset Password":
                 launch_pages.launch.launch()
                 email=lit.sidebar.text_input("Please enter your email address")
                 reset_pass=lit.sidebar.button("Reset password")
