@@ -1,7 +1,7 @@
 import streamlit as lit
 import Art.Animation.lottie_animations
 from streamlit_lottie import st_lottie
-from streamlit_extras.mention import mention   
+  
 
 def testing1():
 
@@ -48,12 +48,7 @@ def testing1():
 
     """)
     with col3:
-        mention(
-            label="Feedback Form",
-            icon=":superhero:",  
-            url="https://forms.office.com/r/s6rJGXtTf3",
-    )
-
+       lit.write("[:superhero: Feedback Form](https://forms.office.com/r/s6rJGXtTf3)")
 
         
     with col3:

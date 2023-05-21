@@ -6,7 +6,7 @@
 ## ______________________________________________________________________________________________________________________##
 
 import pyrebase # Python wrapper for the Firebase API aka Firebase library for Python
-
+import requests
 ## ______________________________________________________________________________________________________________________##
 
 # Initiallising Firebase
@@ -23,6 +23,7 @@ def firebase_config():
         'serviceAccount':'C:/Users/Nina/Downloads/family-area-network-firebase-adminsdk-okm5h-03059d1245.json'
     }
     firebase = pyrebase.initialize_app(firebaseConfig)   
+    
     return firebase  
 
 # Initiallising Firebase authentication
