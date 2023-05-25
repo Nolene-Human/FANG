@@ -18,16 +18,26 @@ import Authentication.user_registration
 import Authentication.user_login
 import Firebase.firebaseconfig
 import Authentication.mfa
+import Security.remove_QR
 
 import Authentication.loginform 
 import requests
+
+#animation
+import json
+from streamlit_lottie import st_lottie
+
+
+import pyotp
+import qrcode
+import time
 
 auth= Firebase.firebaseconfig.firebase_auth()
 database=Firebase.firebaseconfig.firebase_database()
 
 
-
 ## ______________________________________________________________________________________________________________________##
+
 
 ## Page UI / UX
 lit.set_page_config(page_title="FANG",
@@ -39,50 +49,71 @@ lit.image(logo,caption="It's all for show productions")
 
 ## ______________________________________________________________________________________________________________________##
    
+
 ## Side Bar and Navigation
 home=lit.sidebar.radio("""**WELCOME**""",['Home','Register','Login',"Reset Password"],key="visible")
 
-
 ## ______________________________________________________________________________________________________________________##
 
+if home == 'Login':  
 
-if home == 'Login':       
- 
-        email = lit.sidebar.text_input("Please enter your registered email")
-        password = lit.sidebar.text_input("Please enter your password",type='password')
+        emailcol, passwordcol = lit.columns(2)
+        email = emailcol.text_input("Please enter your registered email")
+        password = passwordcol.text_input("Please enter your password",type='password')
         
-        lit.sidebar.markdown("---")  
-       
-        login = lit.sidebar.checkbox("Login",)
-        
-        if login:
-
-                try:
-                        user=auth.sign_in_with_email_and_password(email,password)
-                        new_OTP=name=database.child(user['localId']).child('Userkey').get().val()
+        try:
+                user=auth.sign_in_with_email_and_password(email,password)
+                mfa_check=database.child(user['localId']).child("mfa").get().val()
+                
+                if mfa_check==0:
+                        emailcol.warning("FANG uses time-based one-time passcodes (TOTP) that are compliant with all major authenticator apps and browser extensions including 1Password, Authy, and Google Authenticator.")
+                        new_OTP=database.child(user['localId']).child("Userkey").get().val()
                         generated_OTP=Authentication.mfa.generatepin(new_OTP)
-                        entered_OTP=lit.sidebar.text_input("Enter your one time passcode: ")
+                        passwordcol.write("**Open or Download your favourite Authentication app**")
+                        passwordcol.write("**Add account by scanning QR code**")
+                        uri=pyotp.totp.TOTP(new_OTP).provisioning_uri(name="FANG",issuer_name="FANG App")
+                        qrcode.make(uri).save("QR.png")
+                        emailcol.image("QR.png",width=150)
 
-                        verify_OTP=lit.sidebar.checkbox("Verify")
-                        if verify_OTP:
-                                lit.write(generated_OTP)
-                                if generated_OTP == entered_OTP:
-                                        lit.header("Welcome to your home page")
-                                        logged_in=lit.sidebar.checkbox("",['Logout'], label_visibility="collapsed")
-                                        if logged_in=="Logout":
-                                                launch_pages.launch.launch()
-                                                lit.sidebar.success("You are logged out")
+                        first_verify=passwordcol.text_input("Verify Code, press enter")
+
+                        if first_verify == generated_OTP:
+                                emailcol.success("Great you are now registered")
+                                database.child(user['localId']).update({"mfa":1})
+                                emailcol.header("You are logged in!")
+                                emailcol.write("Thank you for testing ")
+                                with lit.spinner('We are deleting your QR code for security reasons'):
+                                        time.sleep(5)
+                                        Security.remove_QR.del_QR()
+                                lit.success('Done!')
+        
+
+                        else:
+                                lit.write("codes dont match")
+
+                if mfa_check==1:
+                                lit.sidebar.markdown("---") 
+                                new_OTP=database.child(user['localId']).child("Userkey").get().val()
+                                generated_OTP=Authentication.mfa.generatepin(new_OTP)
+
+                                user_mfa=lit.sidebar.text_input("Enter verification Code")
+                                yourmfa = lit.sidebar.button(":flying_saucer: Let's Go ")
+                                                
+                                lit.sidebar.markdown("---")
+
+                                if user_mfa == generated_OTP:
+                                        lit.success("You are logged in!")
+                                        lit.write("Thank you for testing ")
+
 
                                 else:
-                                        lit.write("codes did not match")               
-                except requests.exceptions.HTTPError as err:
-                                lit.write(err)
-                                lit.error("There is a problem with the details you entered, please retry.")  
-                                lit.subheader("""Forgot your password?
-                                You can reset your password in the drop down list""")  
-                                
+                                        lit.sidebar.error("**Code not valid**")               
+                        
+        except requests.exceptions.HTTPError as err:
+                lit.markdown("*Please enter valid info*") 
 
-                       
+        
+
 elif home=="Reset Password":
                 launch_pages.launch.launch()
                 email=lit.sidebar.text_input("Please enter your email address")
@@ -96,7 +127,6 @@ elif home=="Reset Password":
 
 elif home == 'Register':
         Authentication.user_registration.register()
-
 
 
 else:

@@ -6,7 +6,6 @@
 ## ______________________________________________________________________________________________________________________##
 
 import streamlit as lit
-from streamlit_extras.mention import mention       
 from PIL import Image #used to display images on page 
 
 def learn():
@@ -54,11 +53,7 @@ def learn():
     lit.markdown("#### Why would ANYONE want to attack you?")
 
     lit.write("""In the book The Art of Attack by Maxi Reynolds, a very successful social engineering in CyberSecurity states it well""")
-    mention(
-            label="There is no attack without information",
-            icon="❗",  
-            url="https://www.amazon.com/Art-Attack-Attacker-Security-Professionals/dp/1119805465",
-    )
+    lit.write("""In the book [The Art of Attack](https://www.amazon.com/Art-Attack-Attacker-Security-Professionals/dp/1119805465) by Maxi Reynolds, a very successful social engineering in CyberSecurity states it well""")
                     
     lit.write("Your information or the information you have access to is crucial for cybercriminals.")
 
