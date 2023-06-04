@@ -11,7 +11,7 @@ This application is built of the back of a Bachelor of Software Engineering Cybe
 # Introduction
 With the increase popularity in modern workspaces, proactive measures to prevent cybersecurity breaches are now also the responsibility of private networks. 
 
-The problem is the lack of users' technical understanding combined with their fear of implementing any of these solutions due to the knowledge required are creating a huge risk. 
+There is a huge risk in the lack of users' technical understanding combined with their fear of implementing any of the recomended solutions due to the knowledge they required to do so.
 
 The solution is to provide an educational and easy to use cybersecurity tool. 
 
