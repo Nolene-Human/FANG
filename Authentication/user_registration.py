@@ -5,7 +5,7 @@
 ## -------------------------- Uses Firebase_Config functions to verify and register a new users -----------------------------------##
 
 ### FUTURE DEVELOPMENT ###
-# - no future developmentsni
+# - no future developments
 ## ______________________________________________________________________________________________________________________##
 
 import streamlit as lit # Streamlit Front End
@@ -17,12 +17,10 @@ import sys # used to not print call back error on screen
 
 import Firebase.firebaseconfig # Firebase SDK's
 import Authentication.password_check # password rules
+import Authentication.mfa #otp functions
 
 ## ______________________________________________________________________________________________________________________##
 
-import pyotp #  Python library for generating and verifying one-time passwords
-
-## ______________________________________________________________________________________________________________________##
 
 def registration_form():
     # cancel print of python call back errors on user screen
@@ -55,17 +53,20 @@ def registration_form():
             if register_btn:
               
                 try:
-
-
-
                     if (Authentication.password_check.password_check(password)):
-
+                        
                         user=auth.create_user_with_email_and_password(email,password) # User is registered and authenticated through firebase.
                             
                         # Data entered creates user database account through set() 
                         database.child(user['localId']).child("AccountName").set(handle)
                         database.child(user['localId']).child("Email").set(email)
-                        # Sidebar gets updated with Success message
+
+                        #once user is successfully registered a unique key is generated and saved to their account
+                        key=Authentication.mfa.key()
+                        database.child(user['localId']).child("OTP").set(key)
+                        database.child(user['localId']).child("mfa").set(0)
+                        
+                        # Success message
                         lit.success("Your Account has been created!")
                         lit.balloons()                       
 
