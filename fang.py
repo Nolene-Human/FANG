@@ -38,6 +38,9 @@ home=lit.sidebar.radio("""**WELCOME**""",['Home','Login /Register','Registered U
 
 ## ______________________________________________________________________________________________________________________##
 
+if 'loggedIn' not in lit.session_state:
+                lit.session_state['loggedIn']=False
+
 if home == 'Login /Register':
 
         login, register, reset = lit.tabs(["|  Login","|  Register", "|  Reset Password"])
@@ -55,8 +58,15 @@ if home == 'Login /Register':
                 Authentication.user_login.reset_password()
 
 elif home == 'Registered Users':
-        lit.write("You need to be registered to view this page")
+        # managing session state for logged in users
+        if lit.session_state['loggedIn']:
+                lit.write("Welcome!")
+                
+        else:
+                lit.write("You need to be logged in to view this page")
 
+## ______________________________________________________________________________________________________________________##
+        
 else:
       launch_pages.launch.launch()  
 

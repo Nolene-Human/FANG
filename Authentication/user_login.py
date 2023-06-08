@@ -73,6 +73,7 @@ def login_form():
                                 time.sleep(5)
                                 Security.remove_QR.del_QR()
                                 mfa_column.success('Done!')
+                                lit.session_state['loggedIn']=True
                     
                         else:
                             lit.error("🔥 Codes not matching")
@@ -86,6 +87,7 @@ def login_form():
                     if login_button and user_OTP == OTP_now:
                         
                         mfa_column.success("Hi " + name +" You are logged in!")
+                        lit.session_state['loggedIn']=True
 
                 
             except:
