@@ -18,10 +18,14 @@ import Authentication.mfa #otp functions
 import Security.remove_QR
 ## ______________________________________________________________________________________________________________________##
 
+this_user=[]
 
-
+def return_this_user():
+    return_user=this_user
+    return return_user
 
 def login_form():
+
     login_column, mfa_column = lit.columns(2)
 
     database=Firebase.firebaseconfig.firebase_database()
@@ -30,6 +34,7 @@ def login_form():
     #with login_column.form("User_Login"):        
     with login_column:
         lit.subheader("Login")
+        lit.sidebar.write(this_user)
             
         # User input
         email=lit.text_input("Your Email address")
@@ -73,7 +78,9 @@ def login_form():
                                 time.sleep(5)
                                 Security.remove_QR.del_QR()
                                 mfa_column.success('Done!')
-                    
+                                lit.session_state['loggedIn']=True
+                                
+                                
                         else:
                             lit.error("🔥 Codes not matching")
                                     
@@ -84,12 +91,18 @@ def login_form():
                     login_button=mfa_column.button("Login")
                     
                     if login_button and user_OTP == OTP_now:
-                        
+                        lit.sidebar.write(user)
                         mfa_column.success("Hi " + name +" You are logged in!")
-
+                        lit.session_state['loggedIn']=True
+                        
+                    else:
+                        lit.error("🔥 Codes not matching")
                 
+                logged_in={'localID':user['localId']}
+                this_user.append(logged_in)   
+            
             except:
-                lit.error("Please enter the valid credentials")                             
+               lit.error("Please enter the valid credentials")                             
                 
         
         
