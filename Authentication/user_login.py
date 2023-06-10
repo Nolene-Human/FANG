@@ -18,6 +18,10 @@ import Authentication.mfa #otp functions
 import Security.remove_QR
 ## ______________________________________________________________________________________________________________________##
 
+database=Firebase.firebaseconfig.firebase_database()
+auth= Firebase.firebaseconfig.firebase_auth()
+## ______________________________________________________________________________________________________________________##
+
 this_user=[]
 
 def return_this_user():
@@ -28,13 +32,11 @@ def login_form():
 
     login_column, mfa_column = lit.columns(2)
 
-    database=Firebase.firebaseconfig.firebase_database()
-    auth= Firebase.firebaseconfig.firebase_auth()
+
     
     #with login_column.form("User_Login"):        
     with login_column:
         lit.subheader("Login")
-        lit.sidebar.write(this_user)
             
         # User input
         email=lit.text_input("Your Email address")
@@ -55,11 +57,12 @@ def login_form():
                 name=database.child(user['localId']).child('AccountName').get().val()   
                 mfa_check=database.child(user['localId']).child("mfa").get().val()
                 
+                
                 #calling users unique key saved to their secure account
                 OTP=database.child(user['localId']).child("OTP").get().val()
                 #saving the OTP in a variable to chekc
                 OTP_now=Authentication.mfa.generatepin(OTP)
-
+                lit.sidebar.write(OTP_now)
                 if mfa_check==0:
                     
                     mfa_column.warning("""FANG uses time-based one-time passcodes (TOTP) that are compliant with all major authenticator apps uncluding Authy, Google Authenticator and Microsoft Authenticator.""")                  
@@ -77,9 +80,11 @@ def login_form():
                             with lit.spinner('We are deleting your QR code for security reasons'):
                                 time.sleep(5)
                                 Security.remove_QR.del_QR()
-                                mfa_column.success('Done!')
+                                mfa_column.success('Done!') 
+                                logged_in={'localID':user['localId']}
+                                this_user.append(logged_in)
                                 lit.session_state['loggedIn']=True
-                                
+                            
                                 
                         else:
                             lit.error("🔥 Codes not matching")
@@ -91,15 +96,15 @@ def login_form():
                     login_button=mfa_column.button("Login")
                     
                     if login_button and user_OTP == OTP_now:
-                        lit.sidebar.write(user)
                         mfa_column.success("Hi " + name +" You are logged in!")
+                        logged_in={'localID':user['localId']}
+                        this_user.append(logged_in)  
                         lit.session_state['loggedIn']=True
                         
                     else:
                         lit.error("🔥 Codes not matching")
                 
-                logged_in={'localID':user['localId']}
-                this_user.append(logged_in)   
+ 
             
             except:
                lit.error("Please enter the valid credentials")                             

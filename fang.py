@@ -33,7 +33,9 @@ logo=Image.open("Art/Pictures/logo.png")
 lit.image(logo,caption="It's all for show productions")
 
 ## ______________________________________________________________________________________________________________________##
-   
+
+this_user=Authentication.user_login.return_this_user()
+
 ## Side Bar and Navigation
 home=lit.sidebar.radio("""**WELCOME**""",['Home','Login /Register','Registered Users'])
 
@@ -59,17 +61,19 @@ if home == 'Login /Register':
                 Authentication.user_login.reset_password()
 
 elif home == 'Registered Users':
+        
         # managing session state for logged in users
         if lit.session_state['loggedIn']:
                 logout=lit.sidebar.button("logout")
                 registered_pages.register.dashboard()
 
                 if logout:
-                        this_user=Authentication.user_login.return_this_user()
+                        
                         this_user.clear()
                         lit.session_state['loggedIn']=False
+                        lit.cache_data.clear()
                         
-                
+                       
         else:
                 lit.write("You need to be logged in to view this page")
 

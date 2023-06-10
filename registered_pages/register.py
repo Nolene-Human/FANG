@@ -14,23 +14,30 @@ def dashboard():
 ## ______________________________________________________________________________________________________________________##
     with vault:
         lit.subheader("Password Management Tool")
-
-        #UI/ UX
-        left_vault,right_vault = lit.columns(2)
         
-        #Strong password management generator
-        strong_password=registered_pages.vault.generate_password()
+        your_vault, enter_vault=lit.tabs(['Your Vault', 'Add to Vault'])
+        
 
-        new_password=left_vault.button("Generate a strong password")
-        if new_password:
-            right_vault.write(strong_password)  
+        with enter_vault:
+            #UI/ UX
+            left_vault,right_vault = lit.columns(2)
+            
+            #Strong password generator
+            strong_password=registered_pages.vault.generate_password()
+
+            new_password=left_vault.button("Generate a strong password")
+            if new_password:
+                right_vault.write(strong_password)  
 
     #********************************************************************************************************************#
         
         #New vault entry
-        with left_vault:
-            registered_pages.vault.add_password_form() 
+            registered_pages.vault.add_vault_form() 
 ## ______________________________________________________________________________________________________________________##
+
+        with your_vault:
+            registered_pages.vault.cud_vault()
+
     with plan:
         lit.write("this is the plan")
 

@@ -54,3 +54,19 @@ def devices_scan():
                     list_devices_nmap.append(devices_nmap)
 
     return list_devices_nmap
+
+
+
+# ,  column_config={
+#         "Category": lit.column_config.SelectboxColumn(
+#             "Device Category",
+#             help="Where is the use main function ",
+#             width="medium",
+#             options=[
+#                 "Home",
+#                 "Personal",
+#                 "Work",
+#             ],
+#         )
+#     },
+#     hide_index=True,)
