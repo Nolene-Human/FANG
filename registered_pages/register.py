@@ -2,7 +2,7 @@ import streamlit as lit
 
 import registered_pages.plan
 import registered_pages.vault
-
+import time
 
 def dashboard():
     dashboard, vault, plan, devices, network, account = lit.tabs(["|  dashboard ","|  password vault ","|  cybersecurity plan/incident response plan ","|  devices on network ","|  network segmentation ","|  your account "] )
@@ -39,7 +39,25 @@ def dashboard():
             registered_pages.vault.cud_vault()
 
     with plan:
-        lit.write("this is the plan")
+        
+        plan,generate=lit.tabs(['Cybersecurity Plan','Incident Response Plan'])
+        
+        with plan:
+            registered_pages.plan.plan()
+            # save_plan=lit.button('Save Plan',key=now)
+            # if save_plan:
+            #     with open ("MyPlan.txt",'a') as file:
+            #         file.write(registered_pages.plan.plan())
+            #         file.close()
+            #         pass
+            #lit.download_button(label="Save Plan",data=save_plan,file_name='myplan.csv',mime='txt/csv',)
+
+               
+        with generate:
+            registered_pages.plan.comms_plan()
+            registered_pages.plan.plan_ticklist()
+            registered_pages.plan.identify_threats()
+
 
     with devices:
         lit.write('devices')
