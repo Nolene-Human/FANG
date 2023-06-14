@@ -58,9 +58,6 @@ def generate_password():
 def add_vault_form():
     
 
-    for users in this_user:
-        local=users['localID']
-
     user=auth.sign_in_with_email_and_password('test4@gmail.com','D4nc3r$')
     with lit.form("Enter Vault",clear_on_submit=True):
                                                  

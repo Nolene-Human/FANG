@@ -2,7 +2,7 @@ import streamlit as lit
 
 import registered_pages.plan
 import registered_pages.vault
-import time
+import registered_pages.devices
 
 def dashboard():
     dashboard, vault, plan, devices, network, account = lit.tabs(["|  dashboard ","|  password vault ","|  cybersecurity plan/incident response plan ","|  devices on network ","|  network segmentation ","|  your account "] )
@@ -58,9 +58,8 @@ def dashboard():
             registered_pages.plan.plan_ticklist()
             registered_pages.plan.identify_threats()
 
-
     with devices:
-        lit.write('devices')
+        registered_pages.devices.devices_scan()
 
     with network:
         lit.write('network')
