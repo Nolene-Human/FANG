@@ -3,12 +3,25 @@
 ## Family Area Network Gang
 ## by Nolene Human 
 date: 31/01/2023
-This application is built of the back of a Bachelor of Software Engineering Cybersecurity assignment to investigate a solution with recommended improvements.
+This application is built on a Bachelor of Software Engineering Cybersecurity assignment to investigate a solution with recommended improvements.
 
-# IMPORTANT TO READ
-
+# Features
+* Login
+* Register
+* MFA
+* Password Vault
+* Database using Firestore
+* Basic Dashboard
+* Cybersecurity Plan creator
+* Scan Device
+* User able to categorize devices (step1 for network segmentation)
 
 # Introduction
+All features implemented with minor bugs
+The following improvements can be done:
+The application takes a while to run due to multi scans getting fired every the application runs top to bottom.
+Updates UI to only run the scan once or when initiated
+
 
 
 # How to Install the Project
@@ -16,7 +29,7 @@ This application is built of the back of a Bachelor of Software Engineering Cybe
 create an Anaconda account
 import the virtual environment in this project into Anaconda.
 
-download application to your device
+download the application to your device
 
 Run, through terminal:
 
@@ -24,27 +37,15 @@ Run, through terminal:
 Anaconda account: 
 https://anaconda.org/account/register
 
-# How Run the Project
+# How to Run the Project
 Create a virtual environment in Anaconda
 
 Run via open terminal
 
 Navigate to the folder you saved/downloaded this project
 
-run using command : streamlit run Welcome.py
+run using the command: streamlit run fang.py
 
-Anaconda will navigate to the application opened on your loacalhost:()
+The application will launch on localhost.
 
-# How to Use the Project
-
-
-# Not in Project Scope
-
-# Credits
-
-
-# Badges
-
-
-
-# How to Contribute to the Project
+# Future Development
