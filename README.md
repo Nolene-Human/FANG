@@ -16,13 +16,10 @@ This application is built on a Bachelor of Software Engineering Cybersecurity as
 * Scan Device
 * User able to categorize devices (step1 for network segmentation)
 
-# Introduction
+# Important to Note
 All features implemented with minor bugs
 The following improvements can be done:
-The application takes a while to run due to multi scans getting fired every the application runs top to bottom.
-Updates UI to only run the scan once or when initiated
-
-
+The application takes a while to run due to multi scans getting fired every time the application runs top to bottom.
 
 # How to Install the Project
 
@@ -49,3 +46,5 @@ run using the command: streamlit run fang.py
 The application will launch on localhost.
 
 # Future Development
+Updates UI to only run the scan once or when initiated to improve application run time.
+
