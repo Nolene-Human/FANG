@@ -1,186 +1,193 @@
 import streamlit as lit
 import nmap   
-
 import Firebase.firebaseconfig
 
+import pandas as pd
+
+import uuid
+import socket
+import subprocess
 
 
-saved_mac_list=[]
-list_devices_nmap=[]
 
-def devices_scan():
+## ______________________________________________________________________________________________________________________##
 
+# -- get your device Ip address (Wlan) using subprocess -- #
+def findhostdetails():
+      
+    result=subprocess.run('ipconfig',stdout=subprocess.PIPE,text=True).stdout.lower()
+    scan=0
+    for i in result.split('\n'):
+        if 'wireless' in i: scan=1
+        if scan:
+            if 'ipv4' in i: return i.split(':')[1].strip()
+
+
+# -- get your device mac address and name -- #
+def thisdevice():
+    mac_addr = (':'.join(['{:02x}'.format((uuid.getnode() >> elements) & 0xff)
+        for elements in range(0,2*6,2)][::-1]))
+   
+    try:
+        hostname = socket.gethostname()
+
+    except:
+        lit.write("Unable to get Hostname and IP")
+
+    # -- ADDING ALL DATA INTO A LIST TO CALL IN SCANNED DEVICES #
+    yourdevice={"ip":findhostdetails(),"mac":mac_addr,"manufacturer":"","name":hostname}
+
+    return yourdevice
+
+## ______________________________________________________________________________________________________________________##
+
+def segment():
+
+    update_segment=[]
 
     auth=Firebase.firebaseconfig.firebase_auth()    
     database=Firebase.firebaseconfig.firebase_database()
     
-    user=auth.sign_in_with_email_and_password('test4@gmail.com','D4nc3r$')
-
-    tab1,tab2=lit.tabs(['Saved Devices','Scan Network'])
-
-
-    with tab1:
-            
-            scan=lit.button('Scan for new devices')
-            # UX / UI creating columns to return results into rows
-            ip_s,mac_s,manuf_s,category_s =lit.columns(4)
-            # Column Headers                                
-            # UX/UI for scanning Network 
-            with ip_s:
-                        lit.markdown("**IP Address**")
-            with mac_s:
-                        lit.markdown("**MAC Address**")
-            with manuf_s:
-                        lit.markdown("**Manufacturer**")
-            with category_s:
-                        lit.markdown("**Category**")
-
-            try:
-                get_your_devices=database.child(user['localId']).child('Devices').get()
-                for saved in get_your_devices.each():
-                    s_result=saved.val()
-                    
-                    with ip_s:
-                        lit.write(s_result["ip"])
-                    with mac_s:
-                        saved_mac=lit.write(s_result["mac"])
-                    with manuf_s:
-                        lit.write(s_result["manufacturer"])
-                    with category_s:
-                        lit.write(s_result["name"])
-
-                    saved_mac_list.append(saved_mac)
-                   
-            except:
-                lit.write("No devices saved to your network")
-            
-            if scan:
-
-                lit.write("[Lookup the Mac address to see who is the manufacturer](https://mac.lc)")
-                new=nmap.PortScanner()         
-            
-                new.scan(hosts='192.168.1.0/24', arguments='-sn')
-                 
-                for host in new.all_hosts():
-                
-                    if 'mac' in new[host]['addresses']:
-                        mac_address = new[host]["addresses"]["mac"]
-                        manufacturer = new[host]["vendor"].get(mac_address, "Unknown")
-                        device_name="New"
-
-                        for saved in saved_mac_list:
-                            call_mac=saved
-                            if  call_mac!=mac_address:
-                                with ip_s:
-                                            lit.write(host)
-                                with mac_s:
-                                            lit.write(mac_address)
-                                with manuf_s:
-                                        lit.write(manufacturer)
-                                with category_s:
-                                        lit.write(device_name)
-                                
-                                devices_nmap={"ip":host,"mac":mac_address,"manufacturer":manufacturer,"name":device_name}
-                                list_devices_nmap.append(devices_nmap)     
-                                database.child(user['localId']).child('Devices').push(devices_nmap)        
-            
-
-    # with tab2:
-    #     save_devices=lit.button('Save to Database')
- 
-    #             UX / UI creating columns to return results into rows
-    #     ip_col,mac_col,manuf_col,category_col =lit.columns(4)
-    #             Column Headers                                
-    #             UX/UI for scanning Network 
-    #     with ip_col:
-    #         lit.markdown("**IP Address**")
-    #     with mac_col:
-    #         lit.markdown("**MAC Address**")
-    #     with manuf_col:
-    #         lit.markdown("**Manufacturer**")
-    #     with category_col:
-    #         lit.markdown("**Category**")
-
-    #     lit.write("[Lookup the Mac address to see who is the manufacturer](https://mac.lc)")
-    #     new=nmap.PortScanner()         
-            
-    #     new.scan(hosts='192.168.1.0/24', arguments='-sn')
-    #     list_devices_nmap=[] 
-    #     for host in new.all_hosts():
-                
-    #             if 'mac' in new[host]['addresses']:
-    #                 mac_address = new[host]["addresses"]["mac"]
-    #                 manufacturer = new[host]["vendor"].get(mac_address, "Unknown")
-    #                 device_name="New"
-    #                 for saved in saved_mac_list:
-    #                     call_mac=saved
-    #                     if  call_mac!=mac_address:
-    #                         devices_nmap={"ip":host,"mac":mac_address,"manufacturer":manufacturer,"name":device_name}
-    #                         list_devices_nmap.append(devices_nmap)
-                            
-                            
-    # database.child(user['localId']).child('Devices').update(list_devices_nmap)
-
-    # get_your_new_devices=database.child(user['localId']).child('Devices').get()
-
-
-    # update_device=lit.data_editor(get_your_new_devices,  column_config={
-    #                         "Name": lit.column_config.SelectboxColumn(
-    #                         "Device Category",
-    #                         help="Give this device its purpose in your network",
-    #                         width="medium",
-    #                         options=[
-    #                         "Home",
-    #                         "Personal",
-    #                         "Work",
-    #                         "Network Device",
-    #                         ],)},
-    #                         hide_index=True,)
+    user=auth.sign_in_with_email_and_password('test2@gmail.com','J4mD0nut!')
     
+    edit_devices=database.child(user['localId']).child('Devices').get()
+    
+    show_dataframe_devices=[]
+    
+    save_devices=lit.button("Save Categories")
+    try:
+        for device in edit_devices.each():
+                
+                val_result=device.val()
+
+                ip_result=val_result["ip"]
+                mac_result=val_result["mac"]
+                man_result=val_result["manufacturer"]
+                cat_result=val_result["name"]
+
+                read_device_list={"IP":ip_result, "Mac":mac_result,"Manufaturer":man_result,"Category":cat_result}
+                
+                show_dataframe_devices.append(read_device_list)
+
+        device_df=pd.DataFrame(show_dataframe_devices)
+        segmented_network=lit.data_editor(device_df,column_config={'Category':lit.column_config.SelectboxColumn('Category', width='medium',options=[ 
+                                "Home",
+                                "Personal",
+                                "Work",
+                                "Network Device",])},width=5500, height=600)
     
 
-
-                    # if save_devices_nmap:
-                    #     try:
-                    #         database.child(user['localId']).child('Devices').push(devices_nmap)
-                    #         with view_update_devices_tab:
-
-                    #             show_dataframe_devices=[]
-                    #             get_your_devices=database.child(user['localId']).child('Devices').get()
-                                                                    
-                    #             for device in get_your_devices.each():
-                                                                
-                    #                 result=device.val()
-                    #                 ip_result=result["ip"]
-                    #                 mac_result=result["mac"]
-                    #                 manuf_result=result["manufacturer"]
-                    #                 name_result=result["name"]
-                    #                 read_device_list={"IP Address":ip_result,"Mac Address":mac_result,"Manufacturer":manuf_result,"Name":name_result}
-                    #                 show_dataframe_devices.append(read_device_list)
-
-                    #             #update_list=
-                    #             lit.data_editor(show_dataframe_devices,  column_config={
-                    #                     "Name": lit.column_config.SelectboxColumn(
-                    #                         "Device Category",
-                    #                         help="Where is the use main function ",
-                    #                         width="medium",
-                    #                         options=[
-                    #                             "Home",
-                    #                             "Personal",
-                    #                             "Work",
-                    #                             "Network Device",
-                    #                         ],
-                    #                     )
-                    #                 },
-                    #                 hide_index=True,)
-                          
-            
-            
+        new_dict=segmented_network.to_dict('records')
         
-    
-            
-                            
-                        # except:
-                        #         lit.warning("No data yet")
+        
+    except:
+        lit.write('No data in database')
+        
+    if save_devices:
+        #show_dataframe_devices.clear()
+        lit.write("Your Device list has been updated")
+        database.child(user['localId']).child('Devices').remove()
+        for d in new_dict:
+            current_devices={"ip":d["IP"],"mac":d["Mac"],"manufacturer":d["Manufaturer"],"name":d["Category"]}
+            database.child(user['localId']).child('Devices').push(current_devices)
 
-            #return list_devices_nmap
+                                   
+          
+saved_device_list=[]
+new_list_devices_nmap=[]
+full_list_devices_nmap=[]
+
+def devices_scan():
+
+    auth=Firebase.firebaseconfig.firebase_auth()    
+    database=Firebase.firebaseconfig.firebase_database()
+    
+    user=auth.sign_in_with_email_and_password('test2@gmail.com','J4mD0nut!')
+
+    #tab1,tab2=lit.tabs(['Saved Devices','Network Segmentation'])
+
+    devices=lit.radio("Scan and Segment Network",('Saved Devices','Scan for new devices','Categorise Network Devices'),horizontal=True)
+    
+    if devices=='Saved Devices':
+
+        lit.write("This is your device : ", thisdevice())
+        
+        # UX / UI creating columns to return results into rows with headers    
+        ip_s,mac_s,manuf_s,category_s =lit.columns(4)
+        ip_s.markdown("**IP Address**")
+        mac_s.markdown("**MAC Address**")
+        manuf_s.markdown("**Manufacturer**")
+        category_s.markdown("**Category**")
+        try:
+            get_your_devices=database.child(user['localId']).child('Devices').get()
+            for your_devices in get_your_devices.each():
+                s_result=your_devices.val()
+                ip_s.write(s_result["ip"])
+                mac_s.write(s_result["mac"])
+                manuf_s.write(s_result["manufacturer"])
+                category_s.write(s_result["name"])
+
+                #putting SAVED DEVICES into a list to call later for reference
+                current_devices={"ip":s_result["ip"],"mac":s_result["mac"],"manufacturer":s_result["manufacturer"],"name":s_result["name"]}
+                saved_device_list.append(current_devices)
+                
+        except:
+            lit.warning("No devices saved to your database")
+    
+## ______________________________________________________________________________________________________________________##
+
+    # TAB for all Scanning
+    if devices=='Scan for new devices':
+        
+        one,two,three=lit.columns(3)
+        full_scan=one.button("Full Scan Saved and New")
+        #save_scan=two.checkbox("Save to database")
+
+        # UI/UX Columns and Headers
+        ip_sc,mac_sc,manuf_sc,category_sc =lit.columns(4)
+        ip_sc.markdown("**IP Address**")
+        mac_sc.markdown("**MAC Address**")
+        manuf_sc.markdown("**Manufacturer**")
+        category_sc.markdown("**Category**")
+
+        
+        # -- Running full scan and calling all devices on the network
+        if full_scan:
+            new_list_devices_nmap.clear()
+            full_list_devices_nmap.clear()
+
+            lit.write("[Lookup the Mac address to see who is the manufacturer](https://mac.lc)")
+            new=nmap.PortScanner()         
+            
+            new.scan(hosts='192.168.1.0/24', arguments='-sn')
+                 
+            for host in new.all_hosts():
+                
+                if 'mac' in new[host]['addresses']:
+                    mac_address = new[host]["addresses"]["mac"]
+                    manufacturer = new[host]["vendor"].get(mac_address, "Unknown")
+
+                    ip_sc.write(host)
+                    mac_sc.write(mac_address)
+                    manuf_sc.write(manufacturer)
+
+                    devices_nmap={"ip":host,"mac":mac_address,"manufacturer":manufacturer,"name":""}
+                    full_list_devices_nmap.append(devices_nmap)
+                    
+
+                
+        #if save_scan:
+                # Writing to the database only if the device does not exist 
+                    if len(saved_device_list)==0:
+                        database.child(user['localId']).child('Devices').push(devices_nmap) 
+                    else:
+                        for scan_device in full_list_devices_nmap:
+                            device2=scan_device['mac']
+                            for db_device in saved_device_list:
+                                device1=db_device['mac'] 
+                                if device1!=device2:
+                                    database.child(user['localId']).child('Devices').push(devices_nmap)
+                 
+
+    if devices=='Categorise Network Devices':
+        segment()          

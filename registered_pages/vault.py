@@ -58,7 +58,7 @@ def generate_password():
 def add_vault_form():
     
 
-    user=auth.sign_in_with_email_and_password('test4@gmail.com','D4nc3r$')
+    user=auth.sign_in_with_email_and_password('test2@gmail.com','J4mD0nut!')
     with lit.form("Enter Vault",clear_on_submit=True):
                                                  
         account_name=lit.text_input("Enter Account Name: ")
@@ -82,10 +82,10 @@ def cud_vault():
     for users in this_user:
         local=users['localID']
 
-    #user=auth.sign_in_with_email_and_password('test4@gmail.com','D4nc3r$')
+    user=auth.sign_in_with_email_and_password('test2@gmail.com','J4mD0nut!')
     try:
-        get_vault=database.child(local).child('vault').get()
-        #get_vault=database.child(user['localId']).child('vault').get()
+        #get_vault=database.child(local).child('vault').get()
+        get_vault=database.child(user['localId']).child('vault').get()
 
         show_dataframe_vault=[]
     
@@ -105,23 +105,21 @@ def cud_vault():
 
         for vault_item in get_vault.each():
             drop_vault=(vault_item.key(),'1')
-            read,delete = lit.columns([2,1])
-            with read:
+            update,delete = lit.columns([2,1])
+            with update:
                 vault_to_edit, confirm_vault_edit = lit.columns(2)
                 with vault_to_edit:
                     save_edit_vault_data=lit.data_editor(vault_item.val(), key=drop_vault)
             
                 
-                if save_vault_edit:                                         
-                    database.child(local).child('vault').child(vault_item.key()).update(save_edit_vault_data)
-                    #database.child(user['localId']).child('vault').child(vault_item.key()).update(save_edit_vault_data)
+                if save_vault_edit: 
+                    database.child(user['localId']).child('vault').child(vault_item.key()).update(save_edit_vault_data)
                                    
             with delete:
                     delete_vault=(vault_item.key(),'3')
                     vault_delete_option=lit.radio("Delete",("No","Yes"),key=delete_vault,horizontal=True)
                     if vault_delete_option == 'Yes' and save_vault_edit:
-                        database.child(local).child('vault').child(vault_item.key()).remove()
-                        #database.child(user['localId']).child('vault').child(vault_item.key()).remove()
+                        database.child(user['localId']).child('vault').child(vault_item.key()).remove()
                     if vault_delete_option == 'Yes':
                         lit.warning("🚨 Are you sure, this account will be deleted after you saved changes")
  

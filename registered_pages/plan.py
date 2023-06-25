@@ -1,8 +1,6 @@
 import streamlit as lit
 from streamlit_extras.stodo import to_do
 
-
-
 key_comms={}
 ticklist={}
 threats={}
@@ -14,11 +12,14 @@ def plan():
     lit.subheader("Cybersecurity Plan")
     plan=column1.button("generate the plan")
 
-    # clear=column2.button("clear your plan")
-    # if clear:
-    #     key_comms.clear()
-    #     ticklist.clear()
-    #     threats.clear()
+    clear=column2.button("clear your plan")
+    if clear:
+        key_comms.clear()
+        ticklist.clear()
+        threats.clear()
+        key_comms.clear()
+        ticklist.clear()
+        threats.clear()
     if plan:
         lit.markdown("**Goals & Plan to prevent cyber attacks**")
 
@@ -28,25 +29,18 @@ def plan():
         lit.markdown('----------------------')
 
         lit.markdown("**Potential threats**")
-        lit.write("These are the treats we are monitoring:")
+        lit.markdown("**These are the treats we are monitoring:**")
         for threat in threats.values():
                     lit.write(threat)
 
-
-                #lit.markdown('----------------------')
-
-                #lit.markdown("**Security policies**")
-
         lit.markdown('----------------------')
         lit.markdown("**Key Contacts and Communication Plan**")
-        try:
-                    business=key_comms['key_business']
-                    key_contact=key_comms['key_contact']
-                    key_email = key_comms['key_email']
+        business=key_comms['key_business']
+        key_contact=key_comms['key_contact']
+        key_email = key_comms['key_email']
 
-                    lit.markdown("*In the event that "+ business + " falls victim to a cybersecurity attack "+ key_contact +" will contact you either by phone or from "+ key_email +" explaining the sitution and how we are responding to the issue.*")
-        except:
-                    lit.warning("Your key contacts gets generated from your incident response plan")
+        lit.markdown("*In the event that "+ business + " falls victim to a cybersecurity attack "+ key_contact +" will contact you either by phone or from "+ key_email +" explaining the sitution and how we are responding to the issue.*")
+
 
 
     else:
@@ -71,7 +65,7 @@ def comms_plan():
         if save_comms:
             your_comms={'key_business':business,'key_email':key_email,'key_contact':key_contact,'key_it':key_IT}
             key_comms.update(your_comms)
-            lit.write(key_comms)
+            #lit.write(key_comms)
 
 
 ## ______________________________________________________________________________________________________________________##
@@ -156,21 +150,21 @@ def identify_threats():
             threats.update(third)
 
         if configuration:
-            config={"Configuration mistakes from devices joining the network."}
+            config={3:"Configuration mistakes from devices joining the network."}
             threats.update(config)
 
         if cloud:
-            cl={"Cloud Vulnerabilities working with third party or customers web application."}
+            cl={4:"Cloud Vulnerabilities working with third party or customers web application."}
             threats.update(cl)
 
         if things:
-            thi={"Internet of Things : devices weak security."}
+            thi={5:"Internet of Things : devices weak security."}
             threats.update(thi)
 
         if ransomeware:
-            ran={"Ransomware."}
+            ran={6:"Ransomware."}
             threats.update(ran)
 
         if data:
-            dat={"Poor Data Management."}
+            dat={7:"Poor Data Management."}
             threats.update(dat)

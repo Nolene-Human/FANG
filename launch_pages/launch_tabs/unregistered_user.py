@@ -125,39 +125,37 @@ def test():
    if social_Engineering:
       lit.write("**Social Engineering**: this relies on you making a mistake by giving away your information (phishing and email impersonation)")
     
-   elif thirdparty_Exposure:
+   if thirdparty_Exposure:
       lit.write("""**Third-party Exposure**: You are working outside of a protected network, working from home as an employee or contractors.
                  This is making you a weak link in the network for the organisations you are working for""")
       
-   elif configuration:
+   if configuration:
       lit.write("""**Configuration Mistakes** : Not ensuring all your devices connected to the internet meets the minimum security configuration is a huge risk""")
     
-   elif hygiene:
+   if hygiene:
       lit.write("""**Poor Cyber Hygiene** : Poor password, unprotected home networks makes for an easy target""")
 
-   elif cloud:
+   if cloud:
       lit.write("""**Cloud Vulnerabilities** : Web Application and Cloud Service breaches are increasing, default security settings were exposed, exposing ways for application and services
          to be hacked, with insufficient access control such as Multifactor Authentication (MFA) and casual trust between environments is making your devices easier to hack""")
 
-   elif mobile:
+   if mobile:
       lit.write("""**Mobile Device Vulnerabilities** : Malicious mobile application, coming sometimes from the organisations you are working with can cause a risk in you network""")
 
-   elif things:
+   if things:
       lit.write("""**Internet of Things** : Malicious mobile application, coming sometimes from the organisations you working with can cause a risk in you network""")
       
-   elif ransomeware:
+   if ransomeware:
       lit.write("""**Ransomware** : Through malicious software sent to you by an attacker data can be held for ransom, blocking you from accessing it until you have paid, or could provide details
       on how they have hacked your system and threat to release this to your clients.""")
     
-   elif data:
+   if data:
       lit.write("""**Poor Data Management** : Your or the companies you work for, data can be exploited for financial gain- this is different from ransomeware as the data is sold to a third party without your
       knowledge.""")
 
-   elif procedures:
+   if procedures:
       lit.write("""**Inadequate Post-Attack Procedures** : Not having a system or process in place to recover from any of these attacks could close your business or destroy your reputation.""")
 
-   else:
-      lit.write("Tick the tools that you use to see the risks")
    lit.markdown("---")
 
 def tips():

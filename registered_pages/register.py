@@ -1,15 +1,23 @@
+## ----------------------------------------THIS IS 'LOGGED IN USER PAGE' ------------------------------------------------------##
+ ## -------------------------------- Called form fang.py when user logged in ---------------------------------------------##
+## --------------------------  -----------------------------------##
+
 import streamlit as lit
 
+import registered_pages.dashboard
 import registered_pages.plan
 import registered_pages.vault
 import registered_pages.devices
+import registered_pages.network
+
 
 def dashboard():
-    dashboard, vault, plan, devices, network, account = lit.tabs(["|  dashboard ","|  password vault ","|  cybersecurity plan/incident response plan ","|  devices on network ","|  network segmentation ","|  your account "] )
+    dashboard, vault, plan, devices, network, account = lit.tabs(["|  dashboard ","|  password vault ","|  cybersecurity plan/incident response plan ","|  devices on network ","|  network ","|  your account "] )
 
 
     with dashboard:
         lit.write('dashboard')
+        registered_pages.dashboard.dashboard()
 
 ## ______________________________________________________________________________________________________________________##
     with vault:
@@ -32,10 +40,11 @@ def dashboard():
     #********************************************************************************************************************#
         
         #New vault entry
-            registered_pages.vault.add_vault_form() 
+            #registered_pages.vault.add_vault_form() 
 ## ______________________________________________________________________________________________________________________##
 
         with your_vault:
+            lit.write('your vault')
             registered_pages.vault.cud_vault()
 
     with plan:
@@ -43,6 +52,7 @@ def dashboard():
         plan,generate=lit.tabs(['Cybersecurity Plan','Incident Response Plan'])
         
         with plan:
+            lit.write('plan')
             registered_pages.plan.plan()
             # save_plan=lit.button('Save Plan',key=now)
             # if save_plan:
@@ -54,15 +64,18 @@ def dashboard():
 
                
         with generate:
+            lit.write('plan2')
             registered_pages.plan.comms_plan()
             registered_pages.plan.plan_ticklist()
             registered_pages.plan.identify_threats()
 
     with devices:
+        lit.write('device')
         registered_pages.devices.devices_scan()
 
     with network:
         lit.write('network')
+        registered_pages.network.port_scanner()
     
     with account:
         lit.write('account')

@@ -31,8 +31,6 @@ def return_this_user():
 def login_form():
 
     login_column, mfa_column = lit.columns(2)
-
-
     
     #with login_column.form("User_Login"):        
     with login_column:
@@ -62,7 +60,7 @@ def login_form():
                 OTP=database.child(user['localId']).child("OTP").get().val()
                 #saving the OTP in a variable to chekc
                 OTP_now=Authentication.mfa.generatepin(OTP)
-                lit.sidebar.write(OTP_now)
+                #lit.sidebar.write(OTP_now)
                 if mfa_check==0:
                     
                     mfa_column.warning("""FANG uses time-based one-time passcodes (TOTP) that are compliant with all major authenticator apps uncluding Authy, Google Authenticator and Microsoft Authenticator.""")                  

@@ -2,15 +2,15 @@ import streamlit as lit
 
 def password_check(passwd):
      
-    SpecialSym =['$', '@', '#', '%']
+    SpecialSym =['$', '@', '#', '%','!']
     val = True
     
     if len(passwd) < 6:
-        lit.write('length should be at least 6')
+        lit.write('Length should be at least 6 characters')
         val = False
 
     if not any(char.isdigit() for char in passwd):
-        lit.write('Password should have at least one numeral')
+        lit.write('Password should have at least one numeral value')
         val = False
          
     if not any(char.isupper() for char in passwd):
@@ -22,7 +22,7 @@ def password_check(passwd):
         val = False
          
     if not any(char in SpecialSym for char in passwd):
-        lit.write('Password should have at least one of the symbols $ @ #')
+        lit.write("Password should have at least one of the symbols '$', '@', '#', '%', '!' ")
         val = False
     if val:
         return val
