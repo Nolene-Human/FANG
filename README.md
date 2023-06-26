@@ -10,7 +10,7 @@ This application is built on a Bachelor of Software Engineering Cybersecurity as
 * Register
 * MFA
 * Password Vault
-* Database using Firestore
+* Firestore Login and Database Back-end services  
 * Basic Dashboard
 * Cybersecurity Plan creator
 * Scan Device
@@ -23,28 +23,32 @@ The application takes a while to run due to multi scans getting fired every time
 
 # How to Install the Project
 
-create an Anaconda account
-import the virtual environment in this project into Anaconda.
+Create an Anaconda account
+Import the virtual environment in this project into Anaconda.
 
-download the application to your device
-
-Run, through terminal:
+Download the application to your device
 
 ## Requirements
 Anaconda account: 
-https://anaconda.org/account/register
+[https://anaconda.org/account/register](https://anaconda.cloud/sign-in)
 
-# How to Run the Project
-Create a virtual environment in Anaconda
+# How to Run this Project
+Open Anaconda Navigator
 
-Run via open terminal
+'Play' the environment you imported through 'Open Terminal'
 
-Navigate to the folder you saved/downloaded this project
+Navigate to the folder you saved/downloaded this project in the command prompt
 
-run using the command: streamlit run fang.py
+run using command: streamlit run fang.py
 
-The application will launch on localhost.
+Anaconda will run the application on your loacalhost:()
 
 # Future Development
 Dashboard with interactive data
 Hardware to support the software in Network Segmentation
+Secure database
+Password encryption for the password management tool
+Chrome extension for the password management tool
+
+
+
