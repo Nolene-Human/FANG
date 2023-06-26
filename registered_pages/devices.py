@@ -1,12 +1,20 @@
 import streamlit as lit
 import nmap   
-import Firebase.firebaseconfig
 
-import pandas as pd
 
 import uuid
 import socket
 import subprocess
+import pandas as pd
+
+
+import Firebase.firebaseconfig
+import Authentication.user_login_copy
+
+database=Firebase.firebaseconfig.firebase_database()
+
+
+loggedinUser=Authentication.user_login_copy.this_user_id
 
 
 
@@ -14,6 +22,8 @@ import subprocess
 
 # -- get your device Ip address (Wlan) using subprocess -- #
 def findhostdetails():
+
+
       
     result=subprocess.run('ipconfig',stdout=subprocess.PIPE,text=True).stdout.lower()
     scan=0
@@ -42,15 +52,10 @@ def thisdevice():
 ## ______________________________________________________________________________________________________________________##
 
 def segment():
-
-    update_segment=[]
-
-    auth=Firebase.firebaseconfig.firebase_auth()    
-    database=Firebase.firebaseconfig.firebase_database()
+    for user in loggedinUser:
+        id4=user['localID'] 
     
-    user=auth.sign_in_with_email_and_password('test2@gmail.com','J4mD0nut!')
-    
-    edit_devices=database.child(user['localId']).child('Devices').get()
+    edit_devices=database.child(id4).child('Devices').get()
     
     show_dataframe_devices=[]
     
@@ -86,10 +91,10 @@ def segment():
     if save_devices:
         #show_dataframe_devices.clear()
         lit.write("Your Device list has been updated")
-        database.child(user['localId']).child('Devices').remove()
+        database.child(id4).child('Devices').remove()
         for d in new_dict:
             current_devices={"ip":d["IP"],"mac":d["Mac"],"manufacturer":d["Manufaturer"],"name":d["Category"]}
-            database.child(user['localId']).child('Devices').push(current_devices)
+            database.child(id4).child('Devices').push(current_devices)
 
                                    
           
@@ -98,13 +103,9 @@ new_list_devices_nmap=[]
 full_list_devices_nmap=[]
 
 def devices_scan():
+    for user in loggedinUser:
+        id5=user['localID'] 
 
-    auth=Firebase.firebaseconfig.firebase_auth()    
-    database=Firebase.firebaseconfig.firebase_database()
-    
-    user=auth.sign_in_with_email_and_password('test2@gmail.com','J4mD0nut!')
-
-    #tab1,tab2=lit.tabs(['Saved Devices','Network Segmentation'])
 
     devices=lit.radio("Scan and Segment Network",('Saved Devices','Scan for new devices','Categorise Network Devices'),horizontal=True)
     
@@ -119,7 +120,7 @@ def devices_scan():
         manuf_s.markdown("**Manufacturer**")
         category_s.markdown("**Category**")
         try:
-            get_your_devices=database.child(user['localId']).child('Devices').get()
+            get_your_devices=database.child(id5).child('Devices').get()
             for your_devices in get_your_devices.each():
                 s_result=your_devices.val()
                 ip_s.write(s_result["ip"])
@@ -176,17 +177,17 @@ def devices_scan():
                     
 
                 
-        #if save_scan:
+                #if save_scan:
                 # Writing to the database only if the device does not exist 
                     if len(saved_device_list)==0:
-                        database.child(user['localId']).child('Devices').push(devices_nmap) 
+                        database.child(id5).child('Devices').push(devices_nmap) 
                     else:
                         for scan_device in full_list_devices_nmap:
                             device2=scan_device['mac']
                             for db_device in saved_device_list:
                                 device1=db_device['mac'] 
                                 if device1!=device2:
-                                    database.child(user['localId']).child('Devices').push(devices_nmap)
+                                    database.child(id5).child('Devices').push(devices_nmap)
                  
 
     if devices=='Categorise Network Devices':

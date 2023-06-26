@@ -7,19 +7,14 @@ import Firebase.firebaseconfig
 this_user=Authentication.user_login.return_this_user()
 database=Firebase.firebaseconfig.firebase_database()
 auth= Firebase.firebaseconfig.firebase_auth()
+import Authentication.user_login_copy
 
+loggedinUser=Authentication.user_login_copy.this_user_id
 
-
-for users in this_user:
-    local=users['localID']
-
-
-if 'vault_read' not in lit.session_state:
-                lit.session_state['vault_read']=False
 
 
 def generate_password():
-    
+        
     letters = [
         'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o',
         'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D',
@@ -56,9 +51,9 @@ def generate_password():
     return("".join(password))
 
 def add_vault_form():
-    
-
-    user=auth.sign_in_with_email_and_password('test2@gmail.com','J4mD0nut!')
+    for user in loggedinUser:
+        id2=user['localID'] 
+        
     with lit.form("Enter Vault",clear_on_submit=True):
                                                  
         account_name=lit.text_input("Enter Account Name: ")
@@ -72,20 +67,16 @@ def add_vault_form():
         
     if save_to_vault:
         vault_entry={"vault_name" : account_name,"vault_web":account_web,"account_username":account_username,"vault_password":password_entered}
-        database.child(user['localId']).child("vault").push(vault_entry)
+        database.child(id2).child("vault").push(vault_entry)
         
 def cud_vault():
-    lit.session_state['vault_read']=True
+    for user in loggedinUser:
+        id3=user['localID'] 
     
     save_vault_edit=lit.button("Save Changes")
-    
-    for users in this_user:
-        local=users['localID']
 
-    user=auth.sign_in_with_email_and_password('test2@gmail.com','J4mD0nut!')
     try:
-        #get_vault=database.child(local).child('vault').get()
-        get_vault=database.child(user['localId']).child('vault').get()
+        get_vault=database.child(id3).child('vault').get()
 
         show_dataframe_vault=[]
     
@@ -113,13 +104,13 @@ def cud_vault():
             
                 
                 if save_vault_edit: 
-                    database.child(user['localId']).child('vault').child(vault_item.key()).update(save_edit_vault_data)
+                    database.child(id3).child('vault').child(vault_item.key()).update(save_edit_vault_data)
                                    
             with delete:
                     delete_vault=(vault_item.key(),'3')
                     vault_delete_option=lit.radio("Delete",("No","Yes"),key=delete_vault,horizontal=True)
                     if vault_delete_option == 'Yes' and save_vault_edit:
-                        database.child(user['localId']).child('vault').child(vault_item.key()).remove()
+                        database.child(id3).child('vault').child(vault_item.key()).remove()
                     if vault_delete_option == 'Yes':
                         lit.warning("🚨 Are you sure, this account will be deleted after you saved changes")
  

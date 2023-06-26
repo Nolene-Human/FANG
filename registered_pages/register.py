@@ -16,7 +16,6 @@ def dashboard():
 
 
     with dashboard:
-        lit.write('dashboard')
         registered_pages.dashboard.dashboard()
 
 ## ______________________________________________________________________________________________________________________##
@@ -40,11 +39,10 @@ def dashboard():
     #********************************************************************************************************************#
         
         #New vault entry
-            #registered_pages.vault.add_vault_form() 
+            registered_pages.vault.add_vault_form() 
 ## ______________________________________________________________________________________________________________________##
 
         with your_vault:
-            lit.write('your vault')
             registered_pages.vault.cud_vault()
 
     with plan:
@@ -52,7 +50,6 @@ def dashboard():
         plan,generate=lit.tabs(['Cybersecurity Plan','Incident Response Plan'])
         
         with plan:
-            lit.write('plan')
             registered_pages.plan.plan()
             # save_plan=lit.button('Save Plan',key=now)
             # if save_plan:
@@ -64,17 +61,14 @@ def dashboard():
 
                
         with generate:
-            lit.write('plan2')
             registered_pages.plan.comms_plan()
             registered_pages.plan.plan_ticklist()
             registered_pages.plan.identify_threats()
 
     with devices:
-        lit.write('device')
         registered_pages.devices.devices_scan()
 
     with network:
-        lit.write('network')
         registered_pages.network.port_scanner()
     
     with account:

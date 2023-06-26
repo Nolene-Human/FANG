@@ -8,11 +8,16 @@ import nmap
 
 import registered_pages.devices
 import Firebase.firebaseconfig
+import Authentication.user_login_copy
 
+loggedinUser=Authentication.user_login_copy.this_user_id
 
 
 def dashboard():
     col1,col2, col3 = lit.columns(3)
+        
+    for user in loggedinUser:
+        id=user['localID'] 
 
     with lit.spinner('We are scanning your network, depending on the size might take a while'):
         time.sleep(10)
@@ -31,75 +36,73 @@ def dashboard():
 
     with col2:
         lit.markdown("**Network Activities, data of total bytes sent and received**")
-        count=6
-        network_activity=[]
-        
-        # psutil.net_io_counters() returns network I/O statistics as a namedtuple
-        netStats1 = psutil.net_io_counters()
-        # Getting the data of total bytes sent and received
-        dataSent = netStats1.bytes_sent
-        dataRecv = netStats1.bytes_recv
+        # count=6
+        # network_activity=[]
 
-        # Running a loop to get the data continuously
-        while count > 0:
+        # # psutil.net_io_counters() returns network I/O statistics as a namedtuple
+        # netStats1 = psutil.net_io_counters()
+        # # Getting the data of total bytes sent and received
+        # dataSent = netStats1.bytes_sent
+        # dataRecv = netStats1.bytes_recv
 
-            # Delay for one second
-            time.sleep(1)
+        # # Running a loop to get the data continuously
+        # while count > 0:
 
-            # Getting the network i/o stats again to 
-            # count the sending and receiving speed
-            netStats2 = psutil.net_io_counters()
-            
-            # Getting the data of total bytes sent and received
-            # Upload/Sending speed
-            uploadStat = netStats2.bytes_sent - dataSent
-            # Receiving/Download Speed
-            downloadStat = netStats2.bytes_recv - dataRecv
+        #     # Delay for one second
+        #     time.sleep(1)
 
-            network_reading={'Upload Speed':uploadStat,'Download Spee':downloadStat}
-            network_activity.append(network_reading)
-            count -= 1
-    
+        #     # Getting the network i/o stats again to
+        #     # count the sending and receiving speed
+        #     netStats2 = psutil.net_io_counters()
 
-    col2.dataframe(network_activity)
+        #     # Getting the data of total bytes sent and received
+        #     # Upload/Sending speed
+        #     uploadStat = netStats2.bytes_sent - dataSent
+        #     # Receiving/Download Speed
+        #     downloadStat = netStats2.bytes_recv - dataRecv
+
+        #     network_reading={'Upload Speed':uploadStat,'Download Spee':downloadStat}
+        #     network_activity.append(network_reading)
+        #     count -= 1
+
+
+    #col2.dataframe(network_activity)
 
     with col3:
         lit.markdown('**New Devices on your network**')
 
-        auth=Firebase.firebaseconfig.firebase_auth()    
-        database=Firebase.firebaseconfig.firebase_database()
-    
-        user=auth.sign_in_with_email_and_password('test2@gmail.com','J4mD0nut!')
-        saved_count = 0
-        scan_count = 0
-        
-        try:
-            get_your_devices=database.child(user['localId']).child('Devices').get()
-            for your_devices in get_your_devices:
-                saved_count+=1
+        # auth=Firebase.firebaseconfig.firebase_auth()
+        # database=Firebase.firebaseconfig.firebase_database()
 
-            new=nmap.PortScanner()         
-                
-            new.scan(hosts='192.168.1.0/24', arguments='-sn')
-                    
-            for host in new.all_hosts():
-                scan_count+=1
+        # saved_count = 0
+        # scan_count = 0
 
-        
-            col3.write('Number of new devices detected on your network:' )
-            col3.write((scan_count-saved_count))
+        # try:
+        #     get_your_devices=database.child(id).child('Devices').get()
+        #     for your_devices in get_your_devices:
+        #         saved_count+=1
 
-        except:
-            col3.write("No Network Segmentation done")
-            col3.write("Number of devices detected in the network")
-            new=nmap.PortScanner()         
-                
-            new.scan(hosts='192.168.1.0/24', arguments='-sn')
-                    
-            for host in new.all_hosts():
-                scan_count+=1
-            
-            col3.write(scan_count)
+        #     new=nmap.PortScanner()
+
+        #     new.scan(hosts='192.168.1.0/24', arguments='-sn')
+
+        #     for host in new.all_hosts():
+        #         scan_count+=1
+
+
+        #     col3.write('Number of new devices detected on your network:' )
+        #     col3.write((scan_count-saved_count))
+
+        # except:
+        #     col3.write("Number of devices detected in the network")
+        #     new=nmap.PortScanner()
+
+        #     new.scan(hosts='192.168.1.0/24', arguments='-sn')
+
+        #     for host in new.all_hosts():
+        #         scan_count+=1
+
+        #     col3.write(scan_count)
 
 
 

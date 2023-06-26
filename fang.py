@@ -15,7 +15,7 @@ import launch_pages.launch
 import Authentication.user_registration
 import Authentication.user_login 
 import registered_pages.register
-
+import Authentication.user_login_copy
 ## ______________________________________________________________________________________________________________________##
 
 
@@ -49,7 +49,11 @@ if home == 'Login /Register':
         login, register, reset = lit.tabs(["|  Login","|  Register", "|  Reset Password"])
         
         with login:
-                Authentication.user_login.login_form()
+                col1,col2=lit.columns(2)
+                with col1:
+                        Authentication.user_login_copy.login_form()
+                with col2:
+                        Authentication.user_login_copy.login_process()
 
         with register:
                 form, notes = lit.columns(2)
@@ -68,17 +72,14 @@ elif home == 'Registered Users':
                 registered_pages.register.dashboard()
 
                 if logout:
-                        
-                        this_user.clear()
                         lit.session_state['loggedIn']=False
                         lit.cache_data.clear()
-                        
                        
         else:
                 lit.write("You need to be logged in to view this page")
 
 ## ______________________________________________________________________________________________________________________##
-        
+
 else:
       launch_pages.launch.launch()  
 
