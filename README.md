@@ -46,5 +46,5 @@ run using the command: streamlit run fang.py
 The application will launch on localhost.
 
 # Future Development
-Updates UI to only run the scan once or when initiated to improve application run time.
-
+Dashboard with interactive data
+Hardware to support the software in Network Segmentation
